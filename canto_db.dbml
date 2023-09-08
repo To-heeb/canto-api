@@ -1,0 +1,42 @@
+Enum admin_roles {
+  regular_admin
+  super_admin
+}
+
+Table admins {
+  id int [pk, increment]
+  role admin_roles [default: "regular_admin"]
+  first_name varchar
+  last_name varchar
+  email varchar [unique]
+  created_at timestamp [default: `now()`]
+}
+
+Table businesses{
+  id int [pk, increment, ref: < business_images.business_id] 
+  name varchar
+  location varchar
+  type_id varchar [ref: > business_types.id]
+  description varchar
+  open_at time
+  close_at time
+  status boolean [default: true]
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table business_types {
+  id int [pk, increment]
+  name varchar [unique]
+  description varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table business_images {
+  id int [pk, increment]
+  image_name varchar
+  business_id int
+  created_at timestamp
+}
+
