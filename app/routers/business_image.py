@@ -1,11 +1,11 @@
 import os
 
 from typing import Annotated
-from fastapi import Response, status, HTTPException, Depends, APIRouter, File, UploadFile
+from fastapi import Response, status, HTTPException, Depends, APIRouter, File, UploadFile, Form
 
 from sqlalchemy.orm import Session
 
-from .. import  schemas, models, oauth2, database
+from .. import  schemas, models, oauth2, database, utils
 
 
 router = APIRouter(
@@ -14,26 +14,86 @@ router = APIRouter(
 )
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create_business_images(business: schemas.BusinessImage, files: Annotated[list[UploadFile], 
-                                            File(description="Multiple files as UploadFile")],
+def create_business_images(business: schemas.BusinessImage, files: Annotated[list[UploadFile],
+                            File(description="Multiple files as UploadFile", max_length=20000)],
                            db: Session = Depends(database.conn)):
-    
-     business_name = db.query(models.Business.name).filter(models.Business.id == id).first()
-     
-    # validate filetype 
-    for file in files:
-        print(file.content_type)
 
-    #return {"data": new_business_type}
+    business_name = db.query(models.Business.name).filter(models.Business.id == id).first()
+
+    allowed_images_type = [".jpeg", ".jpg", ".png", ".gif", ".webp", ".svg"]
+
+    for file in files:
+        file_extension = os.path.splitext(file.filename)[1]
+
+        if file_extension not in allowed_images_type:
+            raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                                detail=f"Uploaded file type {file.filename} is not allowed")
+
+        image_name = utils.image_name(business_name, file.filename)
+        image_type = file.content_type
+        image_url = utils.image_url(image_name)
+
+        try:
+            contents = file.file.read()
+            with open(image_url, 'wb') as f:
+                f.write(contents)
+        except Exception as exc:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                detail=f"Upload of {file.filename} failed, please try again later"
+                                ) from exc
+        finally:
+            file.file.close()
+
+        image_upload = models.BusinessImage(
+            image_name=image_name,
+            image_type=image_type,
+            business_id=business.business_id,
+            image_url=image_url
+            )
+        db.add(image_upload)
+        db.commit()
+        db.refresh(image_upload)
+        print(image_upload)
+    return {"message": "Successfully uploaded all files"}
 
 
 @router.post("/display", status_code=status.HTTP_201_CREATED)
-def create_business_display_images(business: schemas.BusinessImage, files: Annotated[list[UploadFile], 
-                                            File(description="Multiple files as UploadFile")],
-                           db: Session = Depends(database.conn)):
-    
-    for file in files:
-        print(file.filename)
+def create_business_display_images(file: UploadFile,
+                                   business_id: Annotated[int, Form()],
+                                   db: Session = Depends(database.conn)):
+    business_name = db.query(models.Business.name).filter(models.Business.id == business_id).first()[0]
+
+    allowed_images_type = [".jpeg", ".jpg", ".png", ".gif", ".webp", ".svg"]
+
+    file_extension = os.path.splitext(file.filename)[1]
+
+    if file_extension not in allowed_images_type:
+        raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                            detail=f"Uploaded file type {file.filename} is not allowed")
+    #print(business_name[0])
+    image_name = utils.image_name(business_name, file.filename, "display_image")
+    image_type = file.content_type
+    image_url = utils.image_url(image_name)
+    print("image_url: "+image_url)
+    try:
+        contents = file.file.read()
+        with open(image_url, 'wb') as f:
+            f.write(contents)
+    except Exception as exc:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail=f"Upload of {file.filename} failed, please try again later"
+                            ) from exc
+    finally:
+        file.file.close()
+
+    models.BusinessImage(
+        image_name=image_name,
+        image_type=image_type,
+        business_id=business_id,
+        image_url=image_url
+        )
+
+    return {"message": f"Successfully uploaded {file.filename}"}
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)

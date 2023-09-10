@@ -7,7 +7,7 @@ from .database import Base
 
 class Admin(Base):
     __tablename__ = "admins"
-    
+
     id = Column(Integer, primary_key=True, nullable=False)
     role = Column(String, nullable=False)
     password = Column(String, nullable=False)
@@ -20,7 +20,7 @@ class Admin(Base):
 
 class Business(Base):
     __tablename__ = "businesses"
-    
+
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False,  unique=True)
     location = Column(String, nullable=False)
@@ -38,7 +38,7 @@ class Business(Base):
 
 class BusinessType(Base):
     __tablename__ = "business_types"
-    
+
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False, unique=True)
     description = Column(String, nullable=False)
@@ -47,15 +47,14 @@ class BusinessType(Base):
     updated_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
 
-  
+
 class BusinessImage(Base):
     __tablename__ = "business_images"
-         
+
     id = Column(Integer, primary_key=True, nullable=False)
     image_name = Column(String, nullable=False)
     image_url = Column(String, nullable=False)
     image_type = Column(String, nullable=False)
-    image_status = Column(String, nullable=False, server_default="regular_image")
     business_id = Column(Integer, ForeignKey(
         "businesses.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),

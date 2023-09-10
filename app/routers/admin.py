@@ -1,7 +1,8 @@
+from typing import List
+
 from fastapi import status, HTTPException, Depends, APIRouter, Response
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-from typing import List
 
 from .. import  schemas, utils, models, database, oauth2
 
@@ -80,7 +81,7 @@ def get_admin(id: int, db: Session = Depends(database.conn),
 @router.put("/{id}")
 def update_admin(id: int, updated_admin: schemas.Admin, db: Session = Depends(database.conn),
                 current_user: int = Depends(oauth2.get_current_user)):
-    
+
     admin_query = db.query(models.Admin).filter(models.Admin.id == id)
 
     admin = admin_query.first()
@@ -92,14 +93,13 @@ def update_admin(id: int, updated_admin: schemas.Admin, db: Session = Depends(da
     if admin.role != "super_admin" or admin.id != current_user:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Not authorized to perform requested action")
-        
+    
     # regualr_admin shouldn't update themselve to super_admin
     admin_query.update(updated_admin.model_dump(), synchronize_session=False)
 
     db.commit()
 
     return admin_query.first()
-
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)

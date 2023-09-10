@@ -7,14 +7,14 @@ from enum import Enum, IntEnum
 class RoleEnum(str, Enum):
     reg = 'regular_admin'
     sup = 'super_admin'
-    
+
 class Admin(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
     password: str
     role: Optional[str] = 'regular_admin'
-    
+
 class Business(BaseModel):
     name: str
     location: str
@@ -24,7 +24,7 @@ class Business(BaseModel):
     )
     opened_at: time
     closed_at: time
-    
+
 
 class BusinessType(BaseModel):
     name: str
@@ -33,7 +33,7 @@ class BusinessType(BaseModel):
 
 class BusinessImage(BaseModel):
     business_id: int
-    
+
 
 # Model response
 class AdminResponse(BaseModel):
@@ -43,11 +43,11 @@ class AdminResponse(BaseModel):
     last_name:str
     email: str
     role: str
-    
+
     # class Config:
     #     from_attributes = True
-        
-        
+
+
 class BusinessResponse(BaseModel):
     id: int
     name: str
@@ -58,18 +58,18 @@ class BusinessResponse(BaseModel):
     closed_at: time
     created_at: datetime
     images: BusinessImage
-    
+
     # class Config:
     #     from_attributes = True
-    
+
 class BusinessTypeResponse(BaseModel):
     id: int
     name: str
     description: str
-    
+
     class Config:
         from_attributes = True
-        
+
 # Other models
 class AdminLogin(BaseModel):
     email: EmailStr
@@ -80,9 +80,8 @@ class AdminLogin(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
-    
+
 class TokenData(BaseModel):
     id: Optional[str] = None
 
 admin = Admin.model_validate({"first_name": "toheeb", "last_name": "oyekola", "password": "mypassword","email": "oyekola@gmail.com", "role": "regular_admin"})
-

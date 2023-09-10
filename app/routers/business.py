@@ -33,18 +33,18 @@ def get_businesses(db: Session = Depends(database.conn),
 @router.get("/{id}", status_code=status.HTTP_200_OK)
 def get_business(id: int,db: Session = Depends(database.conn),
                  current_user: int = Depends(oauth2.get_current_user)):
-    
+
     business = db.query(models.Business).filter(models.Business.id == id).first()
     if not business:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Business Type with id: {id} does not exist")
-    
+
     return {"data": business}
 
 
 @router.put("/{id}", status_code=status.HTTP_200_OK)
 def update_business(id: int, updated_business: schemas.Business, db: Session = Depends(database.conn)):
-    
+
     business_query = db.query(models.Business).filter(models.Business.id == id)
 
     business = business_query.first()
@@ -52,18 +52,18 @@ def update_business(id: int, updated_business: schemas.Business, db: Session = D
     if business == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Business with id: {id} does not exist")
-   
+
     business_query.update(updated_business.model_dump(), synchronize_session=False)
 
     db.commit()
-    
+
     return business_query.first()
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_business(id: int, db: Session = Depends(database.conn),
                        current_user: int = Depends(oauth2.get_current_user)):
-    
+
     business_query = db.query(models.Business).filter(models.Business.id == id)
 
     business = business_query.first()
@@ -75,7 +75,4 @@ def delete_business(id: int, db: Session = Depends(database.conn),
     business_query.delete(synchronize_session=False)
     db.commit()
 
-    return Response(status_code=status.HTTP_204_NO_CONTENT)
-                           
-
-#  
+    return Response(status_code=status.HTTP_204_NO_CONTENT)  
