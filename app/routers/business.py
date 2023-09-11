@@ -1,4 +1,5 @@
-from fastapi import Response, status, HTTPException, Depends, APIRouter, Optional
+from typing import Optional
+from fastapi import Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 
 from .. import  schemas, models, oauth2, database
@@ -77,7 +78,7 @@ def delete_business(id: int, db: Session = Depends(database.conn),
 
     business = business_query.first()
 
-    if business == None:
+    if business is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Business type with id: {id} does not exist")
 

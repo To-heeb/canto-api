@@ -67,7 +67,6 @@ def get_admin(id: int, db: Session = Depends(database.conn),
     if not admin:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Admin with id: {id} does not exist")
-    # admin = schemas.AdminResponse(admin)
     # admin = schemas.AdminResponse(
     #                 id=admin.id,
     #                 first_name=admin.first_name,
