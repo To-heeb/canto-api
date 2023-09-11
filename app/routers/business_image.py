@@ -13,12 +13,14 @@ router = APIRouter(
     tags=['BusinessImage']
 )
 
+
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create_business_images(business: schemas.BusinessImage, files: Annotated[list[UploadFile],
-                            File(description="Multiple files as UploadFile", max_length=20000)],
+def create_business_images(files: Annotated[list[UploadFile],
+                           File(description="Multiple files as UploadFile")],
+                           business_id: Annotated[int, Form()],
                            db: Session = Depends(database.conn)):
 
-    business_name = db.query(models.Business.name).filter(models.Business.id == id).first()
+    business_name = db.query(models.Business.name).filter(models.Business.id == business_id).first()[0]
 
     allowed_images_type = [".jpeg", ".jpg", ".png", ".gif", ".webp", ".svg"]
 
@@ -28,7 +30,7 @@ def create_business_images(business: schemas.BusinessImage, files: Annotated[lis
         if file_extension not in allowed_images_type:
             raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
                                 detail=f"Uploaded file type {file.filename} is not allowed")
-
+       
         image_name = utils.image_name(business_name, file.filename)
         image_type = file.content_type
         image_url = utils.image_url(image_name)
@@ -47,13 +49,12 @@ def create_business_images(business: schemas.BusinessImage, files: Annotated[lis
         image_upload = models.BusinessImage(
             image_name=image_name,
             image_type=image_type,
-            business_id=business.business_id,
+            business_id=business_id,
             image_url=image_url
             )
         db.add(image_upload)
         db.commit()
         db.refresh(image_upload)
-        print(image_upload)
     return {"message": "Successfully uploaded all files"}
 
 
@@ -86,12 +87,16 @@ def create_business_display_images(file: UploadFile,
     finally:
         file.file.close()
 
-    models.BusinessImage(
+    image_upload = models.BusinessImage(
         image_name=image_name,
         image_type=image_type,
         business_id=business_id,
         image_url=image_url
         )
+    db.add(image_upload)
+    db.commit()
+    db.refresh(image_upload)
+    print(image_upload)
 
     return {"message": f"Successfully uploaded {file.filename}"}
 

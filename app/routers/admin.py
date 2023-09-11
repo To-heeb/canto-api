@@ -93,7 +93,7 @@ def update_admin(id: int, updated_admin: schemas.Admin, db: Session = Depends(da
     if admin.role != "super_admin" or admin.id != current_user:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Not authorized to perform requested action")
-    
+
     # regualr_admin shouldn't update themselve to super_admin
     admin_query.update(updated_admin.model_dump(), synchronize_session=False)
 

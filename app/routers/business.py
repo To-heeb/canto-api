@@ -1,4 +1,4 @@
-from fastapi import Response, status, HTTPException, Depends, APIRouter
+from fastapi import Response, status, HTTPException, Depends, APIRouter, Optional
 from sqlalchemy.orm import Session
 
 from .. import  schemas, models, oauth2, database
@@ -29,6 +29,15 @@ def get_businesses(db: Session = Depends(database.conn),
     businesses = db.query(models.Business).all()
     return {"data": businesses}
 
+@router.get("/search", status_code=status.HTTP_200_OK)
+def search_businesses(db: Session = Depends(database.conn),
+                      current_user: int = Depends(oauth2.get_current_user),
+                      limit: int = 10,
+                      skip: int = 0,
+                      search: Optional[str] = ""):
+
+    businesses = db.query(models.Business).all()
+    return {"data": businesses}
 
 @router.get("/{id}", status_code=status.HTTP_200_OK)
 def get_business(id: int,db: Session = Depends(database.conn),

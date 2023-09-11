@@ -8,8 +8,10 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 def hash(password: str):
     return pwd_context.hash(password)
 
+
 def verify(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
+
 
 def image_name(business_name, filename, filetype=None):
     # Make all characters lowercase and  Replace spaces with underscores
@@ -26,6 +28,7 @@ def image_name(business_name, filename, filetype=None):
         new_image_name = business_name+"_"+"display_image"+file_extension
 
     return new_image_name
+
 
 def image_directory():
     # Get the current directory

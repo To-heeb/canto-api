@@ -5,6 +5,7 @@ from sqlalchemy.sql.sqltypes import TIMESTAMP, TIME
 
 from .database import Base
 
+
 class Admin(Base):
     __tablename__ = "admins"
 
@@ -33,7 +34,7 @@ class Business(Base):
                         nullable=False, server_default=text('now()'))
     updated_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
-    # business_images = relationship("BusinessImage")
+    business_images = relationship("BusinessImage")
 
 
 class BusinessType(Base):

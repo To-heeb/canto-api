@@ -30,6 +30,7 @@ def get_business_types(db: Session = Depends(database.conn),
     business_types = db.query(models.BusinessType).all()
     return {"data": business_types}
 
+
 @router.get("/{id}", status_code=status.HTTP_200_OK)
 def get_business_type(id: int, db: Session = Depends(database.conn),
                   current_user: int = Depends(oauth2.get_current_user)):
@@ -46,6 +47,7 @@ def get_business_type(id: int, db: Session = Depends(database.conn),
                 created_at=business_type.created_at
                 )
     return {"data": business_type}
+
 
 @router.put("/{id}")
 def update_business_type(id: int, updated_business_type: schemas.BusinessType,
