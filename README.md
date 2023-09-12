@@ -15,7 +15,7 @@ Welcome to the API documentation for the Blog Application! This document provide
    - [Business Image Endpoints](#business-images-endpoints)
    
 ## About
-Canto API allows businesses in a specific location, area or gated community to be
+Canto API allows businesses in a specific location, area or gated community to be added to a directory of businesses that can be seached based on keywords.
 
 ## Features
   * Authentication
