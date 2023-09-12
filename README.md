@@ -1,0 +1,88 @@
+# Canto API Documentation
+
+Welcome to the API documentation for the Blog Application! This document provides information on how to interact with canto APIs.
+
+# Table of Contents
+
+1. [Authentication](#authentication)
+2. [API Endpoints](#api-endpoints)
+   - [Get All Blog Posts](#1-get-all-blog-posts)
+   - [Get Blog Post by ID](#2-get-blog-post-by-id)
+   - [Create a New Blog Post](#3-create-a-new-blog-post)
+   - [Update Blog Post](#4-update-blog-post)
+   - [Delete Blog Post](#5-delete-blog-post)
+   
+## About
+Canto API allows businesses in a specific location, area or gated community to be
+
+## Features
+  * Authentication
+  * Multipe image upload
+  * Search with keywords
+  * View details of the Business
+
+ ## Technologies
+  * Python
+  * Docker
+  * PostgreSQL
+  * Swagger API Spec
+  * Uvicorn server
+
+## Authentication
+
+Before using the API endpoints, you must authenticate yourself. We use JSON Web Tokens (JWT) for authentication. To authenticate, include an `Authorization` header with a valid token in your request.
+
+Example:
+
+```
+
+Authorization: Bearer YOUR_ACCESS_TOKEN
+
+```
+
+## Admin API Endpoints
+This enpoints are for those that can add a business to the application.
+
+| Endpoint                 | Method     | Description                              |
+| ------------------------ | ---------- | ---------------------------------------- |
+| `/admins`           | `GET`    | Retrieve a list of all admins.        |
+| `/admins/{admin_id}` | `GET`    | Retrieve a specific detail of admin by its ID. |
+| `/admin`           | `POST`   | Create an admin account.                  |
+| `/admins/{admin_id}` | `PUT`    | Update an existing admin by its ID.  |
+| `/admins/{admin_id}` | `DELETE` | Delete an admin account by its ID.            |
+| `/admins/login` | `POST` | Admin can login to account.            |
+
+
+## Business Type API Endpoints
+These endpoints is just a to categorize the business into various types and categories based on the Admins intuition.
+
+| Endpoint                 | Method     | Description                              |
+| ------------------------ | ---------- | ---------------------------------------- |
+| `/business/type`           | `GET`    | Retrieve a list of all businesses.        |
+| `/business/type/{type_id}` | `GET`    | Retrieve a specific detail of a business by its ID. |
+| `/business/type`           | `POST`   | Add a business.                  |
+| `/business/type/{type_id}` | `PUT`    | Update an existing business by its ID.  |
+| `/business/type/{type_id}` | `DELETE` | Delete an admin account by its ID.            |
+
+
+## Business API Endpoints
+These are endpoints for businesses to be added.
+
+| Endpoint                 | Method     | Description                              |
+| ------------------------ | ---------- | ---------------------------------------- |
+| `/business`           | `GET`    | Retrieve a list of all businesses.        |
+| `/business/{business_id}` | `GET`    | Retrieve a specific detail of a business by its ID. |
+| `/business`           | `POST`   | Add a business.  
+| `/business/search?limit=10&offset=0&keyword=rice`           | `POST`   | Search for/about a business by keyword.                  |
+| `/business/{business_id}` | `PUT`    | Update an existing business by its ID.  |
+| `/business/{business_id}` | `DELETE` | Delete an admin account by its ID.     
+
+
+## Business Images API Endpoints
+These are endpoints to add images to the business for people to view more details on them.
+
+| Endpoint                 | Method     | Description                              |
+| ------------------------ | ---------- | ---------------------------------------- |
+| `/business/images/display`           | `POST`    | Add a display image to for a business.        |
+| `/business/image/` | `POST`    | Add multiple images to a business. |
+| `/business/image/{image_id}` | `DELETE` | Delete an image a from a business.            |

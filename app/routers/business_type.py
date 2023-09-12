@@ -39,7 +39,7 @@ def get_business_type(id: int, db: Session = Depends(database.conn),
     if not business_type:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Business Type with id: {id} does not exist")
-        
+ 
     business_type = schemas.BusinessTypeResponse(
                 id=business_type.id,
                 name=business_type.name,
@@ -61,7 +61,7 @@ def update_business_type(id: int, updated_business_type: schemas.BusinessType,
     if business_type == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Business type with id: {id} does not exist")
-        
+
     business_type_query.update(updated_business_type.model_dump(), synchronize_session=False)
 
     db.commit()
