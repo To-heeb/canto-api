@@ -4,13 +4,15 @@ Welcome to the API documentation for the Blog Application! This document provide
 
 # Table of Contents
 
-1. [Authentication](#authentication)
-2. [API Endpoints](#api-endpoints)
-   - [Get All Blog Posts](#1-get-all-blog-posts)
-   - [Get Blog Post by ID](#2-get-blog-post-by-id)
-   - [Create a New Blog Post](#3-create-a-new-blog-post)
-   - [Update Blog Post](#4-update-blog-post)
-   - [Delete Blog Post](#5-delete-blog-post)
+1. [About](#about)
+2. [Feature](#features)
+3. [Technologies](#technologies)
+4. [Authentication](#authentication)
+5. [API Endpoints](#api-endpoints)
+   - [Admin Enpoints](#admin-endpoints)
+   - [Business Type Endpoints](#business-type-endpoints)
+   - [Business enpoints](#business-endpoints)
+   - [Business Image Endpoints](#business-images-endpoints)
    
 ## About
 Canto API allows businesses in a specific location, area or gated community to be
@@ -40,7 +42,8 @@ Authorization: Bearer YOUR_ACCESS_TOKEN
 
 ```
 
-## Admin API Endpoints
+## API Endpoints
+## Admin Endpoints
 This enpoints are for those that can add a business to the application.
 
 | Endpoint                 | Method     | Description                              |
@@ -53,7 +56,8 @@ This enpoints are for those that can add a business to the application.
 | `/admins/login` | `POST` | Admin can login to account.            |
 
 
-## Business Type API Endpoints
+
+## Business Type Endpoints
 These endpoints is just a to categorize the business into various types and categories based on the Admins intuition.
 
 | Endpoint                 | Method     | Description                              |
@@ -65,7 +69,8 @@ These endpoints is just a to categorize the business into various types and cate
 | `/business/type/{type_id}` | `DELETE` | Delete an admin account by its ID.            |
 
 
-## Business API Endpoints
+
+## Business Endpoints
 These are endpoints for businesses to be added.
 
 | Endpoint                 | Method     | Description                              |
@@ -78,11 +83,12 @@ These are endpoints for businesses to be added.
 | `/business/{business_id}` | `DELETE` | Delete an admin account by its ID.     
 
 
-## Business Images API Endpoints
+
+## Business Image Endpoints
 These are endpoints to add images to the business for people to view more details on them.
 
 | Endpoint                 | Method     | Description                              |
 | ------------------------ | ---------- | ---------------------------------------- |
-| `/business/images/display`           | `POST`    | Add a display image to for a business.        |
+| `/business/image/display`           | `POST`    | Add a display image to for a business.        |
 | `/business/image/` | `POST`    | Add multiple images to a business. |
 | `/business/image/{image_id}` | `DELETE` | Delete an image a from a business.            |
