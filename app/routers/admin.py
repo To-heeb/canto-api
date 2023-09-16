@@ -42,13 +42,13 @@ def create_admin(admin: schemas.Admin, db: Session = Depends(database.conn),
     db.add(new_admin)
     db.commit()
     db.refresh(new_admin)
-    new_admin = schemas.AdminResponse(
-                    id=new_admin.id,
-                    first_name=new_admin.first_name,
-                    last_name=new_admin.last_name,
-                    email=new_admin.email,
-                    role=new_admin.role
-                    )
+    # new_admin = schemas.AdminResponse(
+    #                 id=new_admin.id,
+    #                 first_name=new_admin.first_name,
+    #                 last_name=new_admin.last_name,
+    #                 email=new_admin.email,
+    #                 role=new_admin.role
+    #                 )
     return {"data": new_admin}
 
 
@@ -63,10 +63,12 @@ def get_admins(db: Session = Depends(database.conn),
 @router.get('/{id}', status_code=status.HTTP_200_OK, response_model=schemas.AdminResponse)
 def get_admin(id: int, db: Session = Depends(database.conn),
               current_user: int = Depends(oauth2.get_current_user)):
-    admin = db.query(models.Admin).filter(models.Admin.id == id).first()
-    if not admin:
+    new_admin = db.query(models.Admin).filter(models.Admin.id == id).first()
+    if not new_admin:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Admin with id: {id} does not exist")
+    # admin = schemas.AdminResponse(admin)
+    
     # admin = schemas.AdminResponse(
     #                 id=admin.id,
     #                 first_name=admin.first_name,
@@ -74,7 +76,7 @@ def get_admin(id: int, db: Session = Depends(database.conn),
     #                 email=admin.email,
     #                 role=admin.role
     #                 )
-    return {"data": admin}
+    return {"data": new_admin}
 
 
 @router.put("/{id}")
