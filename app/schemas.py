@@ -3,17 +3,47 @@ from typing import List, Optional
 from pydantic import BaseModel, EmailStr, ConfigDict, Field
 from enum import Enum, IntEnum
 
-# Model Request
+
+#  Admin Resource
+
 class RoleEnum(str, Enum):
     reg = 'regular_admin'
     sup = 'super_admin'
 
-class Admin(BaseModel):
+
+class AdminBase(BaseModel):
+    """_summary_
+
+    Args:
+        BaseModel (_type_): _description_
+    """
     first_name: str
     last_name: str
     email: EmailStr
-    password: str
     role: Optional[str] = 'regular_admin'
+
+
+class AdminIn(AdminBase):
+    """_summary_
+
+    Args:
+        AdminBase (_type_): _description_
+    """
+    password: str
+
+
+class AdminOut(AdminBase):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    created_at: datetime
+
+
+class AdminLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+
+# Business Resource
 
 class Business(BaseModel):
     name: str
@@ -35,19 +65,6 @@ class BusinessImage(BaseModel):
     business_id: int
 
 
-# Model response
-class AdminResponse(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-    id: int
-    first_name: str
-    last_name:str
-    email: str
-    role: str
-
-    # class Config:
-    #     from_attributes = True
-
-
 class BusinessResponse(BaseModel):
     id: int
     name: str
@@ -59,8 +76,9 @@ class BusinessResponse(BaseModel):
     created_at: datetime
     images: BusinessImage
 
-    # class Config:
-    #     from_attributes = True
+    class Config:
+        from_attributes = True
+
 
 class BusinessTypeResponse(BaseModel):
     id: int
@@ -70,18 +88,19 @@ class BusinessTypeResponse(BaseModel):
     class Config:
         from_attributes = True
 
-# Other models
-class AdminLogin(BaseModel):
-    email: EmailStr
-    password: str
-
 
 # Token models
+
+
 class Token(BaseModel):
     access_token: str
     token_type: str
 
+
 class TokenData(BaseModel):
     id: Optional[str] = None
+    role: Optional[str] = "regular_admin"
 
-admin = Admin.model_validate({"first_name": "toheeb", "last_name": "oyekola", "password": "mypassword","email": "oyekola@gmail.com", "role": "regular_admin"})
+
+admin = AdminIn.model_validate({"first_name": "toheeb", "last_name": "oyekola",
+                                "password": "mypassword", "email": "oyekola@gmail.com", "role": "regular_admin"})

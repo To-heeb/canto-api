@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Time
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.sqltypes import TIMESTAMP, TIME
@@ -7,6 +7,11 @@ from .database import Base
 
 
 class Admin(Base):
+    """_summary_
+
+    Args:
+        Base (_type_): _description_
+    """
     __tablename__ = "admins"
 
     id = Column(Integer, primary_key=True, nullable=False)
@@ -20,6 +25,11 @@ class Admin(Base):
 
 
 class Business(Base):
+    """_summary_
+
+    Args:
+        Base (_type_): _description_
+    """
     __tablename__ = "businesses"
 
     id = Column(Integer, primary_key=True, nullable=False)
@@ -38,6 +48,11 @@ class Business(Base):
 
 
 class BusinessType(Base):
+    """_summary_
+
+    Args:
+        Base (_type_): _description_
+    """
     __tablename__ = "business_types"
 
     id = Column(Integer, primary_key=True, nullable=False)
@@ -50,6 +65,11 @@ class BusinessType(Base):
 
 
 class BusinessImage(Base):
+    """_summary_
+
+    Args:
+        Base (_type_): _description_
+    """
     __tablename__ = "business_images"
 
     id = Column(Integer, primary_key=True, nullable=False)
@@ -60,4 +80,3 @@ class BusinessImage(Base):
         "businesses.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
- 
