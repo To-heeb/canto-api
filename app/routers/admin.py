@@ -130,16 +130,17 @@ def update_admin(id: int, updated_admin: schemas.AdminIn, db: Session = Depends(
     admin_query = db.query(models.Admin).filter(models.Admin.id == id)
 
     admin = admin_query.first()
-    print(current_user.role)
+    print(current_user.role != "super_admin")
+    print(admin.id != current_user.id)
     if admin is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"admin with id: {id} does not exist")
 
-    if current_user.role != "super_admin" or admin.id != current_user.id:
+    if current_user.role != "super_admin" and admin.id != current_user.id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
                             detail="Not authorized to perform requested action")
 
-    if admin.role == "regular_admin":
+    if admin.role == "regular_admin" and current_user.role != "super_admin":
         updated_admin.role = "regular_admin"
 
     admin_query.update(updated_admin.model_dump(), synchronize_session=False)

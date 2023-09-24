@@ -12,7 +12,7 @@ class RoleEnum(str, Enum):
 
 
 class AdminBase(BaseModel):
-    """_summary_
+    """AdminBase Model
 
     Args:
         BaseModel (_type_): _description_
@@ -45,45 +45,54 @@ class AdminLogin(BaseModel):
 
 # Business Resource
 
-class Business(BaseModel):
-    name: str
-    location: str
-    type_id: int
-    description: str | None = Field(
-        default=None, title="The description of the item", max_length=300
-    )
-    opened_at: time
-    closed_at: time
-
-
-class BusinessType(BaseModel):
+class BusinessTypeBase(BaseModel):
     name: str
     description: str
 
 
-class BusinessImage(BaseModel):
-    business_id: int
+class BusinessTypeIn(BusinessTypeBase):
+    pass
 
 
-class BusinessResponse(BaseModel):
+class BusinessTypeOut(BusinessTypeBase):
     id: int
-    name: str
-    location: str
-    type_id: int
-    description: str
-    opened_at: time
-    closed_at: time
-    created_at: datetime
-    images: BusinessImage
 
     class Config:
         from_attributes = True
 
 
-class BusinessTypeResponse(BaseModel):
-    id: int
+class BusinessImage(BaseModel):
+    image_url: str
+    image_type: str
+    image_name: str
+
+
+class BusinessBase(BaseModel):
     name: str
     description: str
+
+
+class BusinessIn(BusinessBase):
+    location: str
+    type_id: int
+    description: str | None = Field(
+        default=None,
+        title="The description of the item",
+        max_length=300
+    )
+    opened_at: time
+    closed_at: time
+
+
+class BusinessOut(BusinessBase):
+    id: int
+    location: str
+    type_id: int
+    display_image: str = None
+    opened_at: time
+    closed_at: time
+    created_at: datetime
+    business_images: list[BusinessImage] = []
 
     class Config:
         from_attributes = True

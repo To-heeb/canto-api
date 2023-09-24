@@ -38,6 +38,7 @@ class Business(Base):
     type_id = Column(Integer, ForeignKey(
         "business_types.id", ondelete="CASCADE"), nullable=False)
     description = Column(String, nullable=False)
+    display_image = Column(String, nullable=True)
     opened_at = Column(TIME, nullable=False)
     closed_at = Column(TIME, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),
@@ -45,6 +46,7 @@ class Business(Base):
     updated_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
     business_images = relationship("BusinessImage")
+    # , back_populates="businesses"
 
 
 class BusinessType(Base):
