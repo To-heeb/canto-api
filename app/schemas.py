@@ -67,6 +67,13 @@ class BusinessImage(BaseModel):
     image_name: str
 
 
+class BusinessImageIds(BaseModel):
+    business_id: int
+    image_ids: List[int] = Field(
+        examples=[1, 2, 3]
+    )
+
+
 class BusinessBase(BaseModel):
     name: str
     description: str
@@ -83,12 +90,15 @@ class BusinessIn(BusinessBase):
     opened_at: time
     closed_at: time
 
+    class Config:
+        from_attributes = True
+
 
 class BusinessOut(BusinessBase):
     id: int
     location: str
     type_id: int
-    display_image: str = None
+    display_image: str | None
     opened_at: time
     closed_at: time
     created_at: datetime

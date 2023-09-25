@@ -60,8 +60,7 @@ def create_admin(admin: schemas.AdminIn, db: Session = Depends(database.conn),
     hashed_password = utils.hash_password(admin.password)
     admin.password = hashed_password
     admin.email = admin.email.lower()
-    new_admin = models.AdminIn(**admin.model_dump())
-    print(new_admin)
+    new_admin = models.Admin(**admin.model_dump())
     db.add(new_admin)
     db.commit()
     return new_admin

@@ -5,7 +5,7 @@ from fastapi import Response, status, HTTPException, Depends, APIRouter, File, U
 
 from sqlalchemy.orm import Session
 
-from .. import models, oauth2, database, utils
+from .. import schemas, models, oauth2, database, utils
 
 
 router = APIRouter(
@@ -70,7 +70,7 @@ def create_business_images(files: Annotated[list[UploadFile],
         db.add(image_upload)
         db.commit()
         db.refresh(image_upload)
-    return {"message": "Successfully uploaded all files"}
+    return {"message": "Successfully uploaded all file(s)"}
 
 
 @router.post("/display", status_code=status.HTTP_201_CREATED)
@@ -101,11 +101,8 @@ def create_business_display_images(file: UploadFile,
     business_query = db.query(models.Business).filter(
         models.Business.id == business_id)
 
-    # business_name = db.query(models.Business.name).filter(
-    # models.Business.id == business_id).first()[0]
-
     business = business_query.first()
-
+    print(type(business))
     allowed_images_type = [".jpeg", ".jpg", ".png", ".gif", ".webp", ".svg"]
 
     file_extension = os.path.splitext(file.filename)[1]
@@ -113,10 +110,10 @@ def create_business_display_images(file: UploadFile,
     if file_extension not in allowed_images_type:
         raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
                             detail=f"Uploaded file type {file.filename} is not allowed")
-    # print(business_name[0])
+
     image_name = utils.image_name(
         business.name, file.filename, "display_image")
-    # image_type = file.content_type
+
     image_url = utils.image_url(image_name)
     try:
         contents = file.file.read()
@@ -130,22 +127,20 @@ def create_business_display_images(file: UploadFile,
         file.file.close()
 
     business.display_image = image_url
-    business_query.update(business,
+    business = schemas.BusinessIn.from_orm(business)
+    print(type(business))
+    business_query.update(business.model_dump(),
                           synchronize_session=False)
-    # image_upload = models.BusinessImage(
-    #     image_name=image_name,
-    #     image_type=image_type,
-    #     business_id=business_id,
-    #     image_url=image_url
-    # )
+
     db.commit()
 
-    return {"message": f"Successfully uploaded {file.filename}"}
+    return {"message": f"Successfully uploaded {file.filename} as Display Image"}
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_business_image(business_id: Annotated[int, Form()],
-                          id: int, db: Session = Depends(database.conn)):
+                          id: int, db: Session = Depends(database.conn),
+                          current_user: int = Depends(oauth2.get_current_user)):
     """_summary_
 
     Args:
@@ -181,6 +176,53 @@ def delete_business_image(business_id: Annotated[int, Form()],
                             detail=f"An error occurred while deleting the file, please try again later"
                             ) from exc
     business_image_query.delete(synchronize_session=False)
+    db.commit()
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
+def delete_business_images(images: schemas.BusinessImageIds,
+                           db: Session = Depends(database.conn),
+                           current_user: int = Depends(oauth2.get_current_user)):
+    """_summary_
+
+    Args:
+        business_id (Annotated[int, Form): _description_
+        id (int): _description_
+        db (Session, optional): _description_. Defaults to Depends(database.conn).
+
+    Raises:
+        HTTPException: _description_
+        HTTPException: _description_
+        HTTPException: _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    image_ids = tuple(images.image_ids)
+    business_images_query = db.query(
+        models.BusinessImage).filter(models.BusinessImage.id.in_(image_ids))
+
+    business_images = business_images_query.all()
+    print(business_images)
+    if business_images is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Image not found")
+
+    try:
+        for business_image in business_images:
+            os.remove(business_image.image_url)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Image not found") from exc
+    except Exception as exc:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail=f"An error occurred while deleting the file, please try again later"
+                            ) from exc
+
+    business_images_query.delete(synchronize_session=False)
     db.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)
