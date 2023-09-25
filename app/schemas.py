@@ -74,6 +74,10 @@ class BusinessImageIds(BaseModel):
     )
 
 
+class BusinessId(BaseModel):
+    business_id: int
+
+
 class BusinessBase(BaseModel):
     name: str
     description: str

@@ -70,7 +70,7 @@ def create_business_images(files: Annotated[list[UploadFile],
         db.add(image_upload)
         db.commit()
         db.refresh(image_upload)
-    return {"message": "Successfully uploaded all file(s)"}
+    return {"message": "File(s) successfully uploaded."}
 
 
 @router.post("/display", status_code=status.HTTP_201_CREATED)
@@ -134,11 +134,11 @@ def create_business_display_images(file: UploadFile,
 
     db.commit()
 
-    return {"message": f"Successfully uploaded {file.filename} as Display Image"}
+    return {"message": f"{file.filename} successfully uploaded as Display Image"}
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_business_image(business_id: Annotated[int, Form()],
+def delete_business_image(business_id: schemas.BusinessId,
                           id: int, db: Session = Depends(database.conn),
                           current_user: int = Depends(oauth2.get_current_user)):
     """_summary_
@@ -156,6 +156,7 @@ def delete_business_image(business_id: Annotated[int, Form()],
     Returns:
         _type_: _description_
     """
+    business_id = business_id.business_id
     business_image_query = db.query(models.BusinessImage).filter(
         models.BusinessImage.id == id,
         models.BusinessImage.business_id == business_id)
@@ -206,7 +207,7 @@ def delete_business_images(images: schemas.BusinessImageIds,
         models.BusinessImage).filter(models.BusinessImage.id.in_(image_ids))
 
     business_images = business_images_query.all()
-    print(business_images)
+
     if business_images is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Image not found")
