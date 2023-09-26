@@ -20,6 +20,7 @@ class AdminBase(BaseModel):
     first_name: str
     last_name: str
     email: EmailStr
+    display_image: str = None
     role: Optional[str] = 'regular_admin'
 
 
@@ -30,6 +31,9 @@ class AdminIn(AdminBase):
         AdminBase (_type_): _description_
     """
     password: str
+
+    class Config:
+        from_attributes = True
 
 
 class AdminOut(AdminBase):

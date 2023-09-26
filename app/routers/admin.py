@@ -1,6 +1,8 @@
+import os
 from typing import List
 
-from fastapi import status, HTTPException, Depends, APIRouter, Response
+
+from fastapi import status, HTTPException, Depends, APIRouter, Response, UploadFile, Form
 from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
@@ -103,6 +105,71 @@ def get_admin(id: int, db: Session = Depends(database.conn),
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Admin with id: {id} does not exist")
     return new_admin
+
+
+@router.post("/{id}/image", status_code=status.HTTP_201_CREATED)
+def add_admin_display_image(id,
+                            file: UploadFile,
+                            db: Session = Depends(database.conn),
+                            current_user: int = Depends(oauth2.get_current_user)):
+    """_summary_
+
+    Args:
+        file (UploadFile): _description_
+        admin_id (Annotated[int, Form): _description_
+        db (Session, optional): _description_. Defaults to Depends(database.conn).
+        current_user (int, optional): _description_. Defaults to Depends(oauth2.get_current_user).
+
+    Raises:
+        HTTPException: _description_
+        HTTPException: _description_
+
+    Returns:
+        _type_: _description_
+    """
+
+    if len(file.filename) <= 0:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
+                            detail=f"No file uploaded")
+
+    admin_id = id
+
+    admin_query = db.query(models.Admin).filter(
+        models.Admin.id == admin_id)
+
+    admin = admin_query.first()
+
+    allowed_images_type = [".jpeg", ".jpg", ".png", ".gif", ".webp", ".svg"]
+
+    file_extension = os.path.splitext(file.filename)[1]
+
+    if file_extension not in allowed_images_type:
+        raise HTTPException(status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                            detail=f"Uploaded file type {file.filename} is not allowed")
+    name = admin.first_name+" "+admin.last_name
+    image_name = utils.image_name(name, file.filename, "display_image")
+
+    image_url = utils.image_url(image_name)
+    try:
+        contents = file.file.read()
+        with open(image_url, 'wb') as f:
+            f.write(contents)
+    except Exception as exc:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail=f"Upload of {file.filename} failed, please try again later"
+                            ) from exc
+    finally:
+        file.file.close()
+
+    admin.display_image = image_url
+    admin = schemas.AdminIn.from_orm(admin)
+
+    admin_query.update(admin.model_dump(),
+                       synchronize_session=False)
+
+    db.commit()
+
+    return {"message": f"{file.filename} successfully uploaded as Display Image"}
 
 
 @router.put("/{id}", response_model=schemas.AdminOut)

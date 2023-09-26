@@ -15,11 +15,11 @@ router = APIRouter(
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
-def create_business_images(files: Annotated[list[UploadFile],
-                           File(description="Multiple files as UploadFile")],
-                           business_id: Annotated[int, Form()],
-                           db: Session = Depends(database.conn),
-                           current_user: int = Depends(oauth2.get_current_user)):
+def add_business_images(files: Annotated[list[UploadFile],
+                                         File(description="Multiple files as UploadFile")],
+                        business_id: Annotated[int, Form()],
+                        db: Session = Depends(database.conn),
+                        current_user: int = Depends(oauth2.get_current_user)):
     """_summary_
 
     Raises:
@@ -74,10 +74,10 @@ def create_business_images(files: Annotated[list[UploadFile],
 
 
 @router.post("/display", status_code=status.HTTP_201_CREATED)
-def create_business_display_images(file: UploadFile,
-                                   business_id: Annotated[int, Form()],
-                                   db: Session = Depends(database.conn),
-                                   current_user: int = Depends(oauth2.get_current_user)):
+def add_business_display_image(file: UploadFile,
+                               business_id: Annotated[int, Form()],
+                               db: Session = Depends(database.conn),
+                               current_user: int = Depends(oauth2.get_current_user)):
     """_summary_
 
     Args:

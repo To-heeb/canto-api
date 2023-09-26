@@ -30,11 +30,11 @@ def verify(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def image_name(business_name, filename, filetype=None):
+def image_name(prefix_name, filename, filetype=None):
     """_summary_
 
     Args:
-        business_name (_type_): _description_
+        prefix_name (_type_): _description_
         filename (_type_): _description_
         filetype (_type_, optional): _description_. Defaults to None.
 
@@ -42,7 +42,7 @@ def image_name(business_name, filename, filetype=None):
         _type_: _description_
     """
     # Make all characters lowercase and  Replace spaces with underscores
-    business_name = business_name.lower().replace(" ", "_")
+    prefix_name = prefix_name.lower().replace(" ", "_")
 
     # Extract the file extension
     file_extension = os.path.splitext(filename)[1]
@@ -50,9 +50,9 @@ def image_name(business_name, filename, filetype=None):
     random_number = random.randint(9999, 100000000)
 
     if filetype is None:
-        new_image_name = business_name+"_"+str(random_number)+file_extension
+        new_image_name = prefix_name+"_"+str(random_number)+file_extension
     else:
-        new_image_name = business_name+"_"+"display_image"+file_extension
+        new_image_name = prefix_name+"_"+"display_image"+file_extension
 
     return new_image_name
 

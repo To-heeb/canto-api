@@ -17,6 +17,7 @@ class Admin(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     role = Column(String, nullable=False)
     password = Column(String, nullable=False)
+    display_image = Column(String, nullable=True)
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     email = Column(String, nullable=False, unique=True)
