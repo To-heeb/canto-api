@@ -2,8 +2,9 @@ from typing import Optional, List
 
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 
-from .. import schemas, models, oauth2, database
+from app import schemas, models, oauth2, database
 
 
 router = APIRouter(
@@ -29,8 +30,8 @@ def get_businesses(db: Session = Depends(database.conn),
                    current_user: int = Depends(oauth2.get_current_user),
                    limit: int = 10,
                    offset: int = 0):
-
-    businesses = db.query(models.Business).limit(limit).offset(offset).all()
+    businesses = db.query(models.Business).order_by(models.Business.views.desc()).limit(
+        limit).offset(offset).all()
     return businesses
 
 
@@ -41,9 +42,8 @@ def search_businesses(db: Session = Depends(database.conn),
                       offset: int = 0,
                       keyword: Optional[str] = ""):
 
-    # print(keyword)
     businesses = db.query(models.Business).filter(models.Business.name.contains(
-        keyword) | models.Business.description.contains(keyword)).limit(limit).offset(offset).all()
+        keyword) | models.Business.description.contains(keyword)).order_by(models.Business.views.desc()).limit(limit).offset(offset).all()
     return businesses
 
 
@@ -60,6 +60,11 @@ def get_business(id: int, db: Session = Depends(database.conn),
     if not business:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Business Type with id: {id} does not exist")
+
+    db.query(models.Business).filter(models.Business.id == id).update(
+        {"views": func.coalesce(models.Business.views, 0) + 1})
+
+    db.commit()
 
     return business
 

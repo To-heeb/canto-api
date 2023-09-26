@@ -5,7 +5,7 @@ from fastapi import Response, status, HTTPException, Depends, APIRouter, File, U
 
 from sqlalchemy.orm import Session
 
-from .. import schemas, models, oauth2, database, utils
+from app import schemas, models, oauth2, database, utils
 
 
 router = APIRouter(
@@ -102,7 +102,7 @@ def create_business_display_images(file: UploadFile,
         models.Business.id == business_id)
 
     business = business_query.first()
-    print(type(business))
+
     allowed_images_type = [".jpeg", ".jpg", ".png", ".gif", ".webp", ".svg"]
 
     file_extension = os.path.splitext(file.filename)[1]
@@ -128,7 +128,7 @@ def create_business_display_images(file: UploadFile,
 
     business.display_image = image_url
     business = schemas.BusinessIn.from_orm(business)
-    print(type(business))
+
     business_query.update(business.model_dump(),
                           synchronize_session=False)
 

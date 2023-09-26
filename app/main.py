@@ -5,7 +5,7 @@ from . import models
 from .routers import admin, business, business_type, business_image
 from .database import engine
 
-models.Base.metadata.create_all(bind=engine)
+# models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Canto API")
 

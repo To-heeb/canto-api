@@ -3,7 +3,7 @@ from typing import List
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 from sqlalchemy.orm import Session
 
-from .. import schemas, models, oauth2, database
+from app import schemas, models, oauth2, database
 
 
 router = APIRouter(
@@ -16,7 +16,7 @@ router = APIRouter(
 def create_business_type(business_type: schemas.BusinessTypeIn,
                          db: Session = Depends(database.conn),
                          current_user: int = Depends(oauth2.get_current_user)):
-    print(business_type)
+
     new_business_type = models.BusinessType(**business_type.model_dump())
     db.add(new_business_type)
     db.commit()

@@ -85,7 +85,7 @@ class BusinessBase(BaseModel):
 
 class BusinessIn(BusinessBase):
     location: str
-    type_id: int
+    business_type_id: int
     description: str | None = Field(
         default=None,
         title="The description of the item",
@@ -101,7 +101,7 @@ class BusinessIn(BusinessBase):
 class BusinessOut(BusinessBase):
     id: int
     location: str
-    type_id: int
+    business_type_id: int
     display_image: str | None
     opened_at: time
     closed_at: time

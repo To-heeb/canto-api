@@ -35,18 +35,19 @@ class Business(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False,  unique=True)
     location = Column(String, nullable=False)
-    type_id = Column(Integer, ForeignKey(
+    business_type_id = Column(Integer, ForeignKey(
         "business_types.id", ondelete="CASCADE"), nullable=False)
     description = Column(String, nullable=False)
+    views = Column(Integer, nullable=True, server_default="0")
     display_image = Column(String, nullable=True)
     opened_at = Column(TIME, nullable=False)
     closed_at = Column(TIME, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
     updated_at = Column(TIMESTAMP(timezone=True),
-                        nullable=False, server_default=text('now()'))
+                        nullable=False, server_default=text('now()'),
+                        server_onupdate=text('now()'))
     business_images = relationship("BusinessImage")
-    # , back_populates="businesses"
 
 
 class BusinessType(Base):
@@ -63,7 +64,8 @@ class BusinessType(Base):
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
     updated_at = Column(TIMESTAMP(timezone=True),
-                        nullable=False, server_default=text('now()'), server_onupdate=text('now()'))
+                        nullable=False, server_default=text('now()'),
+                        server_onupdate=text('now()'))
 
 
 class BusinessImage(Base):
