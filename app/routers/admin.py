@@ -115,19 +115,19 @@ def add_admin_display_image(id,
     """_summary_
 
     Args:
+        id (_type_): _description_
         file (UploadFile): _description_
-        admin_id (Annotated[int, Form): _description_
         db (Session, optional): _description_. Defaults to Depends(database.conn).
         current_user (int, optional): _description_. Defaults to Depends(oauth2.get_current_user).
 
     Raises:
         HTTPException: _description_
         HTTPException: _description_
+        HTTPException: _description_
 
     Returns:
         _type_: _description_
     """
-
     if len(file.filename) <= 0:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"No file uploaded")
@@ -169,7 +169,7 @@ def add_admin_display_image(id,
 
     db.commit()
 
-    return {"message": f"{file.filename} successfully uploaded as Display Image"}
+    return {"message": f"{file.filename} has been successfully uploaded as Display Image"}
 
 
 @router.put("/{id}", response_model=schemas.AdminOut)

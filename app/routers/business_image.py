@@ -70,7 +70,7 @@ def add_business_images(files: Annotated[list[UploadFile],
         db.add(image_upload)
         db.commit()
         db.refresh(image_upload)
-    return {"message": "File(s) successfully uploaded."}
+    return {"message": "File(s) has been successfully uploaded."}
 
 
 @router.post("/display", status_code=status.HTTP_201_CREATED)
@@ -134,7 +134,7 @@ def add_business_display_image(file: UploadFile,
 
     db.commit()
 
-    return {"message": f"{file.filename} successfully uploaded as Display Image"}
+    return {"message": f"{file.filename} has been successfully uploaded as Display Image"}
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
