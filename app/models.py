@@ -85,3 +85,24 @@ class BusinessImage(Base):
         "businesses.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
+
+
+class BusinessWorkingHours(Base):
+    """_summary_
+
+    Args:
+        Base (_type_): _description_
+    """
+    __tablename__ = "business_working_hours"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    business_id = Column(Integer, ForeignKey(
+        "businesses.id", ondelete="CASCADE"), nullable=False)
+    weekday = Column(Integer, nullable=False)
+    opened_at = Column(TIME, nullable=False)
+    closed_at = Column(TIME, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True),
+                        nullable=False, server_default=text('now()'))
+    updated_at = Column(TIMESTAMP(timezone=True),
+                        nullable=False, server_default=text('now()'),
+                        server_onupdate=text('now()'))

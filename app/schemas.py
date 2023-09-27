@@ -1,6 +1,6 @@
 from datetime import datetime, time
 from typing import List, Optional
-from pydantic import BaseModel, EmailStr, ConfigDict, Field
+from pydantic import BaseModel, EmailStr, ConfigDict, Field, PositiveInt
 from enum import Enum, IntEnum
 
 
@@ -49,6 +49,15 @@ class AdminLogin(BaseModel):
 
 # Business Resource
 
+class BusinessWorkingDuration(BaseModel):
+    opened_at: time
+    closed_at: time
+
+
+class BusinessWorkingDay(BaseModel):
+    working_hours: dict[str, BusinessWorkingDuration]
+
+
 class BusinessTypeBase(BaseModel):
     name: str
     description: str
@@ -95,6 +104,7 @@ class BusinessIn(BusinessBase):
         title="The description of the item",
         max_length=300
     )
+    working_hours: dict[int, BusinessWorkingDuration]
     opened_at: time
     closed_at: time
 

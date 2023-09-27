@@ -16,12 +16,33 @@ router = APIRouter(
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.BusinessOut)
 def create_business(business: schemas.BusinessIn, db: Session = Depends(database.conn),
                     current_user: int = Depends(oauth2.get_current_user)):
+    """_summary_
 
-    new_business = models.Business(**business.model_dump())
+    Args:
+        business (schemas.BusinessIn): _description_
+        db (Session, optional): _description_. Defaults to Depends(database.conn).
+        current_user (int, optional): _description_. Defaults to Depends(oauth2.get_current_user).
+
+    Returns:
+        _type_: _description_
+    """
+    new_business = models.Business(
+        **business.model_dump(exclude=["working_hours"]))
+
     db.add(new_business)
     db.commit()
     db.refresh(new_business)
 
+    for working_day, working_hour in business.working_hours.items():
+        new_working_hour = models.BusinessWorkingHours(
+            business_id=new_business.id,
+            weekday=working_day,
+            opened_at=working_hour.opened_at,
+            closed_at=working_hour.closed_at
+        )
+        db.add(new_working_hour)
+
+    db.commit()
     return new_business
 
 
@@ -30,6 +51,17 @@ def get_businesses(db: Session = Depends(database.conn),
                    current_user: int = Depends(oauth2.get_current_user),
                    limit: int = 10,
                    offset: int = 0):
+    """_summary_
+
+    Args:
+        db (Session, optional): _description_. Defaults to Depends(database.conn).
+        current_user (int, optional): _description_. Defaults to Depends(oauth2.get_current_user).
+        limit (int, optional): _description_. Defaults to 10.
+        offset (int, optional): _description_. Defaults to 0.
+
+    Returns:
+        _type_: _description_
+    """
     businesses = db.query(models.Business).order_by(models.Business.views.desc()).limit(
         limit).offset(offset).all()
     return businesses
@@ -41,7 +73,18 @@ def search_businesses(db: Session = Depends(database.conn),
                       limit: int = 10,
                       offset: int = 0,
                       keyword: Optional[str] = ""):
+    """_summary_
 
+    Args:
+        db (Session, optional): _description_. Defaults to Depends(database.conn).
+        current_user (int, optional): _description_. Defaults to Depends(oauth2.get_current_user).
+        limit (int, optional): _description_. Defaults to 10.
+        offset (int, optional): _description_. Defaults to 0.
+        keyword (Optional[str], optional): _description_. Defaults to "".
+
+    Returns:
+        _type_: _description_
+    """
     businesses = db.query(models.Business).filter(models.Business.name.contains(
         keyword) | models.Business.description.contains(keyword)).order_by(models.Business.views.desc()).limit(limit).offset(offset).all()
     return businesses
@@ -50,7 +93,19 @@ def search_businesses(db: Session = Depends(database.conn),
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.BusinessOut)
 def get_business(id: int, db: Session = Depends(database.conn),
                  current_user: int = Depends(oauth2.get_current_user)):
+    """_summary_
 
+    Args:
+        id (int): _description_
+        db (Session, optional): _description_. Defaults to Depends(database.conn).
+        current_user (int, optional): _description_. Defaults to Depends(oauth2.get_current_user).
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        _type_: _description_
+    """
     business = db.query(models.Business).join(
         models.BusinessImage,
         models.BusinessImage.business_id == models.Business.id,
@@ -73,7 +128,20 @@ def get_business(id: int, db: Session = Depends(database.conn),
 def update_business(id: int, updated_business: schemas.BusinessIn,
                     db: Session = Depends(database.conn),
                     current_user: int = Depends(oauth2.get_current_user)):
+    """_summary_
 
+    Args:
+        id (int): _description_
+        updated_business (schemas.BusinessIn): _description_
+        db (Session, optional): _description_. Defaults to Depends(database.conn).
+        current_user (int, optional): _description_. Defaults to Depends(oauth2.get_current_user).
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        _type_: _description_
+    """
     business_query = db.query(models.Business).filter(models.Business.id == id)
 
     business = business_query.first()
@@ -93,7 +161,19 @@ def update_business(id: int, updated_business: schemas.BusinessIn,
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_business(id: int, db: Session = Depends(database.conn),
                     current_user: int = Depends(oauth2.get_current_user)):
+    """_summary_
 
+    Args:
+        id (int): _description_
+        db (Session, optional): _description_. Defaults to Depends(database.conn).
+        current_user (int, optional): _description_. Defaults to Depends(oauth2.get_current_user).
+
+    Raises:
+        HTTPException: _description_
+
+    Returns:
+        _type_: _description_
+    """
     business_query = db.query(models.Business).filter(models.Business.id == id)
 
     business = business_query.first()
