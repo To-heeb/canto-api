@@ -47,8 +47,7 @@ def admin_login(admin_credentials: OAuth2PasswordRequestForm = Depends(),
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=schemas.AdminOut)
-def create_admin(admin: schemas.AdminIn, db: Session = Depends(database.conn),
-                 current_user: int = Depends(oauth2.get_current_user)):
+def create_admin(admin: schemas.AdminIn, db: Session = Depends(database.conn)):
     """_summary_
 
     Args:

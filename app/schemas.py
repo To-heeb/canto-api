@@ -30,10 +30,8 @@ class AdminIn(AdminBase):
     Args:
         AdminBase (_type_): _description_
     """
+    model_config = ConfigDict(from_attributes=True)
     password: str
-
-    class Config:
-        from_attributes = True
 
 
 class AdminOut(AdminBase):
@@ -68,10 +66,8 @@ class BusinessTypeIn(BusinessTypeBase):
 
 
 class BusinessTypeOut(BusinessTypeBase):
+    model_config = ConfigDict(from_attributes=True)
     id: int
-
-    class Config:
-        from_attributes = True
 
 
 class BusinessImage(BaseModel):
@@ -97,6 +93,7 @@ class BusinessBase(BaseModel):
 
 
 class BusinessIn(BusinessBase):
+    model_config = ConfigDict(from_attributes=True)
     location: str
     business_type_id: int
     description: str | None = Field(
@@ -108,11 +105,9 @@ class BusinessIn(BusinessBase):
     opened_at: time
     closed_at: time
 
-    class Config:
-        from_attributes = True
-
 
 class BusinessOut(BusinessBase):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     location: str
     business_type_id: int
@@ -121,9 +116,6 @@ class BusinessOut(BusinessBase):
     closed_at: time
     created_at: datetime
     business_images: list[BusinessImage] = []
-
-    class Config:
-        from_attributes = True
 
 
 # Token models
