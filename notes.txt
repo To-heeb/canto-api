@@ -1,0 +1,17 @@
+TODO features
+
+
+
+Tasks
+- write test for application
+- create frontend for application
+- update readme doc
+
+
+Completed
+- Fix updated_at column in tables to work when they are updated
+- Ability to delete multiple images at once
+- use alembic to create all tables so they can be in version control
+- Business ranked by click on business
+- add display image for admin
+- Days Opened for businesses

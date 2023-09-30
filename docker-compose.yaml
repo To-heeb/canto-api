@@ -33,6 +33,7 @@ services:
       - db-password
     volumes:
       - postgres-db:/var/lib/postgresql/data
+      - ./init/testing_db.sh:/docker-entrypoint-initdb.d/testing_db.sh
     environment:
       - POSTGRES_DB=canto_db
       - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
