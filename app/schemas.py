@@ -1,7 +1,7 @@
 from datetime import datetime, time
 from typing import List, Optional
-from pydantic import BaseModel, EmailStr, ConfigDict, Field, PositiveInt
-from enum import Enum, IntEnum
+from pydantic import BaseModel, EmailStr, ConfigDict, Field
+from enum import Enum
 
 
 #  Admin Resource
@@ -37,6 +37,7 @@ class AdminIn(AdminBase):
 class AdminOut(AdminBase):
     model_config = ConfigDict(from_attributes=True)
     id: int
+    display_image: str | None
     created_at: datetime
 
 

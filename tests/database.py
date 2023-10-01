@@ -13,9 +13,7 @@ from app import models
 SQLALCHEMY_DATABASE_URL = f'postgresql://{settings.database_username}:{settings.database_password}@{settings.database_hostname}:{settings.database_port}/{settings.database_name}_test'
 
 
-engine = create_engine(SQLALCHEMY_DATABASE_URL,
-                       connect_args={"check_same_thread": False},
-                       poolclass=StaticPool)
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 TestingSessionLocal = sessionmaker(
     autocommit=False, autoflush=False, bind=engine)
