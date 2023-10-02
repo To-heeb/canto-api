@@ -28,7 +28,6 @@ def create_business_type(business_type: schemas.BusinessTypeIn,
 @router.get("/", status_code=status.HTTP_200_OK, response_model=List[schemas.BusinessTypeOut])
 def get_business_types(db: Session = Depends(database.conn),
                        current_user: int = Depends(oauth2.get_current_user)):
-    print("get_business_types")
     business_types = db.query(models.BusinessType).all()
     return business_types
 
