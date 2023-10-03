@@ -89,8 +89,8 @@ def test_business_types(session):
             "description": "These are grocery items."
         }]
 
-    def create_business_type_model(post):
-        return models.BusinessType(**post)
+    def create_business_type_model(business_type):
+        return models.BusinessType(**business_type)
 
     business_types_map = map(create_business_type_model, business_types_data)
     business_types_list = list(business_types_map)
@@ -100,3 +100,107 @@ def test_business_types(session):
 
     business_types = session.query(models.BusinessType).all()
     return business_types
+
+
+@pytest.fixture
+def test_businesses(session):
+
+    business_data = [
+        {
+            "name": "Mama Akara Spot 2",
+            "location": "Behind Block 52",
+            "business_type_id": 1,
+            "description": "This is the sales of Akara and Akamu",
+            "working_hours": {
+
+                "1": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "2": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "3": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "4": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "5": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "6": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "00:00:00"
+                },
+                "7": {
+                    "opened_at": "00:00:00",
+                    "closed_at": "00:00:00"
+                }
+            },
+            "opened_at": "19:00",
+            "closed_at": "20:30"
+        },
+        {
+            "name": "Mama Akara Spot 1",
+            "location": "Behind Soldiers Club",
+            "business_type_id": 1,
+            "description": "This is the sales of Akara and Akamu",
+            "working_hours": {
+                "1": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "2": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "3": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "4": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "5": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "6": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "00:00:00"
+                },
+                "7": {
+                    "opened_at": "00:00:00",
+                    "closed_at": "00:00:00"
+                }
+            },
+            "opened_at": "19:00",
+            "closed_at": "20:30"
+        }
+    ]
+
+    def create_business_model(business):
+        return models.Business(**business)
+
+    business_map = map(create_business_model, business_data)
+    business_list = list(business_map)
+
+    session.add_all(business_list)
+    session.commit()
+
+    # for working_day, working_hour in business.working_hours.items():
+    #     new_working_hour = models.BusinessWorkingHours(
+    #         business_id=new_business.id,
+    #         weekday=working_day,
+    #         opened_at=working_hour.opened_at,
+    #         closed_at=working_hour.closed_at
+    #     )
+    #     db.add(new_working_hour)
+    businesses = session.query(models.Business).all()
+    return businesses
