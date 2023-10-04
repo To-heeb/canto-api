@@ -53,7 +53,6 @@ def test_user(client):
     res = client.post('/admins', json=user_data)
     assert res.status_code == 201
     new_user = res.json()
-    print(new_user)
     new_user["password"] = user_data["password"]
     return new_user
 
@@ -103,83 +102,22 @@ def test_business_types(session):
 
 
 @pytest.fixture
-def test_businesses(session):
+def test_businesses(session, test_business_types):
 
     business_data = [
         {
             "name": "Mama Akara Spot 2",
             "location": "Behind Block 52",
-            "business_type_id": 1,
+            "business_type_id": test_business_types[0].id,
             "description": "This is the sales of Akara and Akamu",
-            "working_hours": {
-
-                "1": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "20:20:00"
-                },
-                "2": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "20:20:00"
-                },
-                "3": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "20:20:00"
-                },
-                "4": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "20:20:00"
-                },
-                "5": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "20:20:00"
-                },
-                "6": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "00:00:00"
-                },
-                "7": {
-                    "opened_at": "00:00:00",
-                    "closed_at": "00:00:00"
-                }
-            },
             "opened_at": "19:00",
             "closed_at": "20:30"
         },
         {
             "name": "Mama Akara Spot 1",
             "location": "Behind Soldiers Club",
-            "business_type_id": 1,
+            "business_type_id": test_business_types[0].id,
             "description": "This is the sales of Akara and Akamu",
-            "working_hours": {
-                "1": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "20:20:00"
-                },
-                "2": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "20:20:00"
-                },
-                "3": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "20:20:00"
-                },
-                "4": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "20:20:00"
-                },
-                "5": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "20:20:00"
-                },
-                "6": {
-                    "opened_at": "19:00:00",
-                    "closed_at": "00:00:00"
-                },
-                "7": {
-                    "opened_at": "00:00:00",
-                    "closed_at": "00:00:00"
-                }
-            },
             "opened_at": "19:00",
             "closed_at": "20:30"
         }
@@ -194,13 +132,88 @@ def test_businesses(session):
     session.add_all(business_list)
     session.commit()
 
-    # for working_day, working_hour in business.working_hours.items():
-    #     new_working_hour = models.BusinessWorkingHours(
-    #         business_id=new_business.id,
-    #         weekday=working_day,
-    #         opened_at=working_hour.opened_at,
-    #         closed_at=working_hour.closed_at
-    #     )
-    #     db.add(new_working_hour)
     businesses = session.query(models.Business).all()
+
+    business_working_hours_data = [
+        {
+            "working_hours": {
+
+                "1": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "2": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "3": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "4": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "5": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "6": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "00:00:00"
+                },
+                "7": {
+                    "opened_at": "00:00:00",
+                    "closed_at": "00:00:00"
+                }
+            }
+        },
+        {
+            "working_hours": {
+                "1": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "2": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "3": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "4": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "5": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "20:20:00"
+                },
+                "6": {
+                    "opened_at": "19:00:00",
+                    "closed_at": "00:00:00"
+                },
+                "7": {
+                    "opened_at": "00:00:00",
+                    "closed_at": "00:00:00"
+                }
+            }
+        }
+    ]
+
+    # for i in business_working_hours_data:
+    #     for working_day, working_hour in business_working_hours_data["working_hours"].items():
+    #         new_working_hour = models.BusinessWorkingHours(
+    #             business_id=businesses[i].id,
+    #             weekday=working_day,
+    #             opened_at=working_hour.opened_at,
+    #             closed_at=working_hour.closed_at
+    #         )
+    #         session.add(new_working_hour)
+    #         i = i+1
+    #     session.commit()
+
+    print(business_working_hours_data[0]["working_hours"])
+    # print(businesses[0].__dict__)
     return businesses

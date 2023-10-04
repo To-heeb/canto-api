@@ -33,7 +33,6 @@ def test_admin_login(client, test_user):
             "username": test_user['email'],
             "password": test_user['password']
         })
-    print(response)
     login_response = schemas.Token(**response.json())
     payload = jwt.decode(login_response.access_token,
                          settings.secret_key, algorithms=[settings.algorithm])
