@@ -48,14 +48,12 @@ def create_business(business: schemas.BusinessIn, db: Session = Depends(database
 
 @router.get("/", status_code=status.HTTP_200_OK,  response_model=List[schemas.BusinessOut])
 def get_businesses(db: Session = Depends(database.conn),
-                   current_user: int = Depends(oauth2.get_current_user),
                    limit: int = 10,
                    offset: int = 0):
     """_summary_
 
     Args:
         db (Session, optional): _description_. Defaults to Depends(database.conn).
-        current_user (int, optional): _description_. Defaults to Depends(oauth2.get_current_user).
         limit (int, optional): _description_. Defaults to 10.
         offset (int, optional): _description_. Defaults to 0.
 
@@ -76,8 +74,7 @@ def search_businesses(db: Session = Depends(database.conn),
     """_summary_
 
     Args:
-        db (Session, optional): _description_. Defaults to Depends(database.conn).
-        current_user (int, optional): _description_. Defaults to Depends(oauth2.get_current_user).
+        db (Session, optional): _description_. Defaults to Depends(database.conn)
         limit (int, optional): _description_. Defaults to 10.
         offset (int, optional): _description_. Defaults to 0.
         keyword (Optional[str], optional): _description_. Defaults to "".
@@ -91,14 +88,12 @@ def search_businesses(db: Session = Depends(database.conn),
 
 
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.BusinessOut)
-def get_business(id: int, db: Session = Depends(database.conn),
-                 current_user: int = Depends(oauth2.get_current_user)):
+def get_business(id: int, db: Session = Depends(database.conn)):
     """_summary_
 
     Args:
         id (int): _description_
-        db (Session, optional): _description_. Defaults to Depends(database.conn).
-        current_user (int, optional): _description_. Defaults to Depends(oauth2.get_current_user).
+        db (Session, optional): _description_. Defaults to Depends(database.conn)
 
     Raises:
         HTTPException: _description_

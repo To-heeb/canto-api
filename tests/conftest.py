@@ -202,18 +202,18 @@ def test_businesses(session, test_business_types):
         }
     ]
 
-    # for i in business_working_hours_data:
-    #     for working_day, working_hour in business_working_hours_data["working_hours"].items():
-    #         new_working_hour = models.BusinessWorkingHours(
-    #             business_id=businesses[i].id,
-    #             weekday=working_day,
-    #             opened_at=working_hour.opened_at,
-    #             closed_at=working_hour.closed_at
-    #         )
-    #         session.add(new_working_hour)
-    #         i = i+1
-    #     session.commit()
-
-    print(business_working_hours_data[0]["working_hours"])
+    i = 0
+    for business_working_time in business_working_hours_data:
+        business_working_hours = business_working_time["working_hours"]
+        for working_day, working_time in business_working_hours.items():
+            new_working_hour = models.BusinessWorkingHours(
+                business_id=businesses[i].id,
+                weekday=working_day,
+                opened_at=working_time["opened_at"],
+                closed_at=working_time["closed_at"]
+            )
+            session.add(new_working_hour)
+        i = i+1
+        session.commit()
     # print(businesses[0].__dict__)
     return businesses

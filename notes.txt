@@ -1,9 +1,7 @@
-TODO features
-
-
-
 Tasks
 - write test for application
+- add items sold by the businesses
+- remove opened_at and closed_at from business table
 - create frontend for application
 - update readme doc
 

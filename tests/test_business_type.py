@@ -41,7 +41,7 @@ def test_get_one_busineess_type(authorized_client, test_business_types):
     ("Street food", "awesome new content"),
     ("favorite pizza", "i love pepperoni")
 ])
-def test_create_busineess_type(authorized_client, name, description):
+def test_create_business_type(authorized_client, name, description):
     res = authorized_client.post(
         "/business/type/", json={"name": name, "description": description})
 
@@ -51,33 +51,33 @@ def test_create_busineess_type(authorized_client, name, description):
     assert business_type.description == description
 
 
-def test_unauthorized_user_create_busineess_type(client):
+def test_unauthorized_user_create_business_type(client):
     res = client.post(
         "/business/type/", json={"name": "arbitrary title", "description": "aasdfjasdf"})
     assert res.status_code == 401
 
 
-def test_unauthorized_user_delete_busineess_type(client, test_business_types):
+def test_unauthorized_user_delete_business_type(client, test_business_types):
     res = client.delete(
         f"/business/type/{test_business_types[0].id}")
     assert res.status_code == 401
 
 
-def test_delete_busineess_type(authorized_client, test_business_types):
+def test_delete_business_type(authorized_client, test_business_types):
     res = authorized_client.delete(
         f"/business/type/{test_business_types[0].id}")
 
     assert res.status_code == 204
 
 
-def test_delete_busineess_type_that_does_not_exist(authorized_client):
+def test_delete_business_type_that_does_not_exist(authorized_client):
     res = authorized_client.delete(
         f"/business/type/99")
 
     assert res.status_code == 404
 
 
-def test_update_busineess_type(authorized_client, test_business_types):
+def test_update_business_type(authorized_client, test_business_types):
     data = {
         "name": "updated name",
         "description": "updatd description",
@@ -92,13 +92,13 @@ def test_update_busineess_type(authorized_client, test_business_types):
     assert updated_business_types.description == data['description']
 
 
-def test_unauthorized_user_update_busineess_type(client, test_business_types):
+def test_unauthorized_user_update_business_type(client, test_business_types):
     res = client.put(
         f"/business/type/{test_business_types[0].id}")
     assert res.status_code == 401
 
 
-def test_update_busineess_type_that_does_not_exist(authorized_client, test_business_types):
+def test_update_business_type_that_does_not_exist(authorized_client, test_business_types):
     data = {
         "name": "updated name",
         "description": "updatd description",
