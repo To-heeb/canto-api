@@ -110,16 +110,18 @@ def test_businesses(session, test_business_types):
             "location": "Behind Block 52",
             "business_type_id": test_business_types[0].id,
             "description": "This is the sales of Akara and Akamu",
-            "opened_at": "19:00",
-            "closed_at": "20:30"
+            "status": 1
+            # "opened_at": "19:00",
+            # "closed_at": "20:30"
         },
         {
             "name": "Mama Akara Spot 1",
             "location": "Behind Soldiers Club",
             "business_type_id": test_business_types[0].id,
             "description": "This is the sales of Akara and Akamu",
-            "opened_at": "19:00",
-            "closed_at": "20:30"
+            "status": 0
+            # "opened_at": "19:00",
+            # "closed_at": "20:30"
         }
     ]
 

@@ -96,6 +96,7 @@ class BusinessBase(BaseModel):
 class BusinessIn(BusinessBase):
     model_config = ConfigDict(from_attributes=True)
     location: str
+    status: int
     business_type_id: int
     description: str | None = Field(
         default=None,
@@ -103,18 +104,15 @@ class BusinessIn(BusinessBase):
         max_length=300
     )
     working_hours: dict[int, BusinessWorkingDuration]
-    opened_at: time
-    closed_at: time
 
 
 class BusinessOut(BusinessBase):
     model_config = ConfigDict(from_attributes=True)
     id: int
     location: str
+    status: int
     business_type_id: int
     display_image: str | None
-    opened_at: time
-    closed_at: time
     created_at: datetime
     business_images: list[BusinessImage] = []
 

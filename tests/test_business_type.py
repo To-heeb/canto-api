@@ -19,6 +19,14 @@ def test_unauthorized_user_get_all_busineess_types(client):
     assert res.status_code == 401
 
 
+def test_get_one_busineess_type(authorized_client, test_business_types):
+    res = authorized_client.get(f"/business/type/{test_business_types[0].id}")
+    business_type = schemas.BusinessTypeOut(**res.json())
+    assert business_type.id == test_business_types[0].id
+    assert business_type.name == test_business_types[0].name
+    assert business_type.description == test_business_types[0].description
+
+
 def test_unauthorized_user_get_one_busineess_type(client, test_business_types):
     res = client.get(f"/business/type/{test_business_types[0].id}")
     assert res.status_code == 401
@@ -27,14 +35,6 @@ def test_unauthorized_user_get_one_busineess_type(client, test_business_types):
 def test_get_one_busineess_type_that_does_not_exist(authorized_client):
     res = authorized_client.get(f"/business/type/88888")
     assert res.status_code == 404
-
-
-def test_get_one_busineess_type(authorized_client, test_business_types):
-    res = authorized_client.get(f"/business/type/{test_business_types[0].id}")
-    business_type = schemas.BusinessTypeOut(**res.json())
-    assert business_type.id == test_business_types[0].id
-    assert business_type.name == test_business_types[0].name
-    assert business_type.description == test_business_types[0].description
 
 
 @pytest.mark.parametrize("name, description", [
@@ -57,17 +57,17 @@ def test_unauthorized_user_create_business_type(client):
     assert res.status_code == 401
 
 
-def test_unauthorized_user_delete_business_type(client, test_business_types):
-    res = client.delete(
-        f"/business/type/{test_business_types[0].id}")
-    assert res.status_code == 401
-
-
 def test_delete_business_type(authorized_client, test_business_types):
     res = authorized_client.delete(
         f"/business/type/{test_business_types[0].id}")
 
     assert res.status_code == 204
+
+
+def test_unauthorized_user_delete_business_type(client, test_business_types):
+    res = client.delete(
+        f"/business/type/{test_business_types[0].id}")
+    assert res.status_code == 401
 
 
 def test_delete_business_type_that_does_not_exist(authorized_client):
@@ -93,8 +93,15 @@ def test_update_business_type(authorized_client, test_business_types):
 
 
 def test_unauthorized_user_update_business_type(client, test_business_types):
+    data = {
+        "name": "updated name",
+        "description": "updatd description",
+        "id": test_business_types[0].id
+
+    }
+
     res = client.put(
-        f"/business/type/{test_business_types[0].id}")
+        f"/business/type/{test_business_types[0].id}", json=data)
     assert res.status_code == 401
 
 

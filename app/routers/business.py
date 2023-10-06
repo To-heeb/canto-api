@@ -145,9 +145,19 @@ def update_business(id: int, updated_business: schemas.BusinessIn,
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Business with id: {id} does not exist")
 
-    business_query.update(updated_business.model_dump(),
+    business_query.update(updated_business.model_dump(exclude=["working_hours"]),
                           synchronize_session=False)
 
+    db.commit()
+
+    for working_day, working_hour in updated_business.working_hours.items():
+        new_working_hour = models.BusinessWorkingHours(
+            business_id=id,
+            weekday=working_day,
+            opened_at=working_hour.opened_at,
+            closed_at=working_hour.closed_at
+        )
+        db.add(new_working_hour)
     db.commit()
 
     return business_query.first()

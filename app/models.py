@@ -36,13 +36,13 @@ class Business(Base):
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, nullable=False,  unique=True)
     location = Column(String, nullable=False)
+    status = Column(Integer, nullable=False,
+                    doc="0 for inactive, 1 for active")
     business_type_id = Column(Integer, ForeignKey(
         "business_types.id", ondelete="CASCADE"), nullable=False)
     description = Column(String, nullable=False)
     views = Column(Integer, nullable=True, server_default="0")
     display_image = Column(String, nullable=True)
-    opened_at = Column(TIME, nullable=False)
-    closed_at = Column(TIME, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
     updated_at = Column(TIMESTAMP(timezone=True),
@@ -85,6 +85,27 @@ class BusinessImage(Base):
         "businesses.id", ondelete="CASCADE"), nullable=False)
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False, server_default=text('now()'))
+
+
+class BusinessItem(Base):
+    """_summary_
+
+    Args:
+        Base (_type_): _description_
+    """
+    __tablename__ = "business_items"
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    name = Column(String, nullable=False)
+    status = Column(Integer, nullable=False,
+                    doc="0 for inactive, 1 for active")
+    business_id = Column(Integer, ForeignKey(
+        "businesses.id", ondelete="CASCADE"), nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True),
+                        nullable=False, server_default=text('now()'))
+    updated_at = Column(TIMESTAMP(timezone=True),
+                        nullable=False, server_default=text('now()'),
+                        server_onupdate=text('now()'))
 
 
 class BusinessWorkingHours(Base):

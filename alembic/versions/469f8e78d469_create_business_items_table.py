@@ -19,8 +19,26 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    pass
+    """Create business items table with alembic
+    """
+    op.create_table(
+        "business_items",
+        sa.Column('id', sa.Integer(), nullable=False, primary_key=True),
+        sa.Column('name', sa.String(), nullable=False,  unique=True),
+        sa.Column('status', sa.Integer(), nullable=False,
+                  doc="0 for inactive, 1 for active"),
+        sa.Column('business_id', sa.Integer(), nullable=False),
+        sa.Column("created_at", sa.TIMESTAMP(timezone=True),
+                  nullable=False, server_default=sa.text('now()')),
+        sa.Column("updated_at", sa.TIMESTAMP(timezone=True),
+                  nullable=False, server_default=sa.text('now()'),
+                  server_onupdate=sa.text('now()')),
+        sa.ForeignKeyConstraint(['business_id'], [
+            'businesses.id'], ondelete="CASCADE")
+    )
 
 
 def downgrade() -> None:
-    pass
+    """Drop business images with alembic
+    """
+    op.drop_table('business_items')
