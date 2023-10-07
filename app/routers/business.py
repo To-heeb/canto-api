@@ -67,7 +67,6 @@ def get_businesses(db: Session = Depends(database.conn),
 
 @router.get("/search", status_code=status.HTTP_200_OK, response_model=List[schemas.BusinessOut])
 def search_businesses(db: Session = Depends(database.conn),
-                      current_user: int = Depends(oauth2.get_current_user),
                       limit: int = 10,
                       offset: int = 0,
                       keyword: Optional[str] = ""):

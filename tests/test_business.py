@@ -198,3 +198,34 @@ def test_update_business_that_does_not_exist(authorized_client, test_business_ty
         f"/business/99", json=data)
 
     assert res.status_code == 404
+
+
+def test_search_business(authorized_client, test_businesses):
+    res = authorized_client.get(
+        f"/business/search?keyword=Akara")
+
+    def validate(business_map):
+        return schemas.BusinessOut(**business_map)
+    business_map = map(validate, res.json())
+    assert res.status_code == 200
+
+
+def test_unauthorized_user_search_business(client, test_businesses):
+    res = client.get(
+        f"/business/search?keyword=Akara")
+
+    def validate(business_map):
+        return schemas.BusinessOut(**business_map)
+    business_map = map(validate, res.json())
+    assert res.status_code == 200
+
+
+def test_search_business_that_does_not_exist(authorized_client, test_businesses):
+    res = authorized_client.get(
+        f"/business/search?keyword=erthegf")
+
+    def validate(business_map):
+        return schemas.BusinessOut(**business_map)
+    business_map = map(validate, res.json())
+    print(business_map)
+    assert res.status_code == 200

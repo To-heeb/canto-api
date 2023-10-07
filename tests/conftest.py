@@ -58,6 +58,22 @@ def test_user(client):
 
 
 @pytest.fixture
+def test_user2(client):
+    user_data = {
+        "first_name": "Haashim",
+        "last_name": "Oyekola",
+        "email": "haashim@gmail.com",
+        "password": "password",
+        "role": "regular_admin"
+    }
+    res = client.post('/admins', json=user_data)
+    assert res.status_code == 201
+    new_user = res.json()
+    new_user["password"] = user_data["password"]
+    return new_user
+
+
+@pytest.fixture
 def token(test_user):
     return create_access_token({"admin_id":  test_user['id'], "admin_role": test_user['role']})
 
@@ -67,6 +83,22 @@ def authorized_client(client, token):
     client.headers = {
         **client.headers,
         "Authorization": f"Bearer {token}"
+    }
+
+    return client
+
+
+@pytest.fixture
+def token2(test_user2):
+    return create_access_token({"admin_id":  test_user2['id'], "admin_role": test_user2['role']})
+
+
+@pytest.fixture
+def authorized_client2(client, token2):
+
+    client.headers = {
+        **client.headers,
+        "Authorization": f"Bearer {token2}"
     }
 
     return client

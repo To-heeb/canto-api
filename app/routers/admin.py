@@ -79,6 +79,11 @@ def get_admins(db: Session = Depends(database.conn),
     Returns:
         _type_: _description_
     """
+
+    if current_user.role != "super_admin":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Not authorized to perform requested action")
+
     admins = db.query(models.Admin).all()
     return admins
 
@@ -103,6 +108,11 @@ def get_admin(id: int, db: Session = Depends(database.conn),
     if not new_admin:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Admin with id: {id} does not exist")
+
+    if current_user.role != "super_admin" and id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Not authorized to perform requested action")
+
     return new_admin
 
 
@@ -171,7 +181,7 @@ def add_admin_display_image(id,
     return {"message": f"{file.filename} has been successfully uploaded as Display Image"}
 
 
-@router.put("/{id}", response_model=schemas.AdminOut)
+@router.put("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.AdminOut)
 def update_admin(id: int, updated_admin: schemas.AdminIn, db: Session = Depends(database.conn),
                  current_user: int = Depends(oauth2.get_current_user)):
     """_summary_

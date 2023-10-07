@@ -3,13 +3,13 @@ Subtasks
     - test admin role for admins
     - start test_buiness_item
     - figure out test image
-    - test search for business
 
 Tasks
 - write test for application
 - add items sold by the businesses
 - create frontend for application
 - update readme doc
+- add items to business search
 
 
 Completed
@@ -20,3 +20,4 @@ Completed
 - add display image for admin
 - Days Opened for businesses
 - remove opened_at and closed_at from business table
+- test search for business
