@@ -8,7 +8,7 @@ from app import schemas, models, oauth2, database
 
 router = APIRouter(
     prefix="/business/type",
-    tags=['BusinessType']
+    tags=['Business Type']
 )
 
 

@@ -251,3 +251,46 @@ def test_businesses(session, test_business_types):
         session.commit()
     # print(businesses[0].__dict__)
     return businesses
+
+
+@pytest.fixture
+def test_business_items(session, test_businesses):
+    business_items_data = [
+        {
+            "name": "Akara",
+            "status": 1,
+            "business_id": test_businesses[0].id
+        },
+        {
+            "name": "Akamu",
+            "status": 1,
+            "business_id": test_businesses[0].id
+        },
+        {
+            "name": "Sugar",
+            "status": 0,
+            "business_id": test_businesses[0].id
+        },
+        {
+            "name": "Maimai",
+            "status": 1,
+            "business_id": test_businesses[1].id
+        },
+        {
+            "name": "Yam",
+            "status": 1,
+            "business_id": test_businesses[1].id
+        }
+    ]
+
+    def create_business_item_model(business_item):
+        return models.BusinessItem(**business_item)
+
+    business_items_map = map(create_business_item_model, business_items_data)
+    business_items_list = list(business_items_map)
+
+    session.add_all(business_items_list)
+    session.commit()
+
+    business_items = session.query(models.BusinessItem).all()
+    return business_items

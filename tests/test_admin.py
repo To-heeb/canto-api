@@ -1,7 +1,6 @@
 import pytest
 from jose import jwt
 from app import schemas
-from .database import session, client
 
 from app.config import settings
 
@@ -114,9 +113,9 @@ def test_update_admin(authorized_client, test_user):
         "password": "password",
         "role": "super_admin"
     }
+
     res = authorized_client.put(
-        f"/admin/{test_user['id']}", json=data)
-    print(res.json())
+        f"/admins/{test_user['id']}", json=data)
     updated_admin = schemas.AdminOut(**res.json())
     assert res.status_code == 200
     assert updated_admin.first_name == data["first_name"]
@@ -124,48 +123,90 @@ def test_update_admin(authorized_client, test_user):
     assert updated_admin.role == data["role"]
 
 
-# def test_unauthorized_user_update_business(client, test_business_types, test_businesses):
+def test_unauthorized_user_update_admin(client, test_user):
 
-#     data = {
-#         "name": "Mama Akara Spot 2",
-#         "location": "Behind Block 52",
-#         "business_type_id": test_business_types[0].id,
-#         "description": "This is the sales of Akara and Akamu",
-#         "status": 1,
-#         "working_hours": {
-#             "1": {"opened_at": "19:00:00", "closed_at": "20:20:00"},
-#             "2": {"opened_at": "19:00:00", "closed_at": "20:20:00"},
-#             "3": {"opened_at": "19:00:00", "closed_at": "20:20:00"},
-#             "4": {"opened_at": "19:00:00", "closed_at": "20:20:00"},
-#             "5": {"opened_at": "19:00:00", "closed_at": "20:20:00"},
-#             "6": {"opened_at": "19:00:00", "closed_at": "00:00:00"},
-#             "7": {"opened_at": "00:00:00", "closed_at": "00:00:00"}
-#         }
-#     }
-#     res = client.put(
-#         f"/business/{test_businesses[0].id}", json=data)
-#     assert res.status_code == 401
+    data = {
+        "first_name": "Haarith",
+        "last_name": "Oyekola",
+        "email": "haarith@gmail.com",
+        "password": "password",
+        "role": "super_admin"
+    }
+
+    res = client.put(
+        f"/admins/{test_user['id']}", json=data)
+    assert res.status_code == 401
 
 
-# def test_update_business_that_does_not_exist(authorized_client, test_business_types):
-#     data = {
-#         "name": "Mama Akara Spot 2",
-#         "location": "Behind Block 52",
-#         "business_type_id": test_business_types[0].id,
-#         "description": "This is the sales of Akara and Akamu",
-#         "status": 1,
-#         "working_hours": {
-#             "1": {"opened_at": "19:00:00", "closed_at": "20:20:00"},
-#             "2": {"opened_at": "19:00:00", "closed_at": "20:20:00"},
-#             "3": {"opened_at": "19:00:00", "closed_at": "20:20:00"},
-#             "4": {"opened_at": "19:00:00", "closed_at": "20:20:00"},
-#             "5": {"opened_at": "19:00:00", "closed_at": "20:20:00"},
-#             "6": {"opened_at": "19:00:00", "closed_at": "00:00:00"},
-#             "7": {"opened_at": "00:00:00", "closed_at": "00:00:00"}
-#         }
-#     }
+def test_super_admin_can_update_other_admins(authorized_client, test_user2):
+    data = {
+        "first_name": "Haarith",
+        "last_name": "Oyekola",
+        "email": "haarith@gmail.com",
+        "password": "password",
+        "role": "super_admin"
+    }
 
-#     res = authorized_client.put(
-#         f"/business/99", json=data)
+    res = authorized_client.put(
+        f"/admins/{test_user2['id']}", json=data)
+    updated_admin = schemas.AdminOut(**res.json())
+    assert res.status_code == 200
+    assert updated_admin.first_name == data["first_name"]
+    assert updated_admin.email == data["email"]
+    assert updated_admin.role == data["role"]
 
-#     assert res.status_code == 404
+
+def test_regular_admin_can_not_update_other_admins(authorized_client2, test_user, test_user2):
+    data = {
+        "first_name": "Haarith",
+        "last_name": "Oyekola",
+        "email": "haarith@gmail.com",
+        "password": "password",
+        "role": "super_admin"
+    }
+
+    res = authorized_client2.put(
+        f"/admins/{test_user['id']}", json=data)
+    assert res.status_code == 403
+
+
+def test_regular_admin_can_not_update_thier_role_to_super_admin(authorized_client2, test_user, test_user2):
+    data = {
+        "first_name": "Haarith",
+        "last_name": "Oyekola",
+        "email": "haarith@gmail.com",
+        "password": "password",
+        "role": "super_admin"
+    }
+
+    res = authorized_client2.put(
+        f"/admins/{test_user2['id']}", json=data)
+    updated_admin = schemas.AdminOut(**res.json())
+    assert updated_admin.role != data["role"]
+    assert updated_admin.role == "regular_admin"
+
+
+def test_delete_admin(authorized_client, test_user):
+    res = authorized_client.delete(
+        f"/admins/{test_user['id']}")
+
+    assert res.status_code == 204
+
+
+def test_unauthorized_user_delete_admin(client, test_user):
+    res = client.delete(
+        f"/admins/{test_user['id']}")
+    assert res.status_code == 401
+
+
+def test_super_admin_can_delete_other_admins(authorized_client, test_user2):
+    res = authorized_client.delete(
+        f"/admins/{test_user2['id']}")
+
+    assert res.status_code == 204
+
+
+def test_regular_admin_can_not_delete_other_admins(authorized_client2, test_user):
+    res = authorized_client2.delete(
+        f"/admins/{test_user['id']}")
+    assert res.status_code == 403

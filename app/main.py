@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import admin, business, business_type, business_image
+from .routers import admin, business, business_type, business_image, business_item
 
 
 # models.Base.metadata.create_all(bind=engine)
@@ -22,6 +22,7 @@ app.include_router(admin.router)
 app.include_router(business.router)
 app.include_router(business_type.router)
 app.include_router(business_image.router)
+app.include_router(business_item.router)
 
 
 @app.get("/")

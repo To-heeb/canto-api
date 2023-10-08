@@ -11,6 +11,11 @@ class RoleEnum(str, Enum):
     sup = 'super_admin'
 
 
+class Status(int, Enum):
+    true = 1
+    false = 0
+
+
 class AdminBase(BaseModel):
     """AdminBase Model
 
@@ -115,6 +120,22 @@ class BusinessOut(BusinessBase):
     display_image: str | None
     created_at: datetime
     business_images: list[BusinessImage] = []
+
+
+class BusinessItemBase(BaseModel):
+    name: str
+    status: Status
+    business_id: int
+
+
+class BusinessItemIn(BusinessItemBase):
+    pass
+
+
+class BusinessItemOut(BusinessItemBase):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    created_at: datetime
 
 
 # Token models

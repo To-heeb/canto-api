@@ -10,7 +10,7 @@ from app import schemas, models, oauth2, database, utils
 
 router = APIRouter(
     prefix="/business/image",
-    tags=['BusinessImage']
+    tags=['Business Image']
 )
 
 
