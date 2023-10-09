@@ -49,6 +49,7 @@ class Business(Base):
                         nullable=False, server_default=text('now()'),
                         server_onupdate=text('now()'))
     business_images = relationship("BusinessImage")
+    business_items = relationship("BusinessItem")
 
 
 class BusinessType(Base):

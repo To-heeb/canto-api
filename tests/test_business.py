@@ -26,10 +26,10 @@ def test_unauthorized_user_get_all_businesses(client, test_businesses):
     assert res.status_code == 200
 
 
-def test_get_one_business(authorized_client, test_businesses):
+def test_get_one_business(authorized_client, test_businesses, test_business_items):
     res = authorized_client.get(f"/business/{test_businesses[0].id}")
     business = schemas.BusinessOut(**res.json())
-
+    print(res.json())
     assert res.status_code == 200
     assert business.id == test_businesses[0].id
     assert business.name == test_businesses[0].name

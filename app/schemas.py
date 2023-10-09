@@ -93,6 +93,22 @@ class BusinessId(BaseModel):
     business_id: int
 
 
+class BusinessItemBase(BaseModel):
+    name: str
+    status: Status
+    business_id: int
+
+
+class BusinessItemIn(BusinessItemBase):
+    pass
+
+
+class BusinessItemOut(BusinessItemBase):
+    model_config = ConfigDict(from_attributes=True)
+    id: int
+    created_at: datetime
+
+
 class BusinessBase(BaseModel):
     name: str
     description: str
@@ -120,22 +136,7 @@ class BusinessOut(BusinessBase):
     display_image: str | None
     created_at: datetime
     business_images: list[BusinessImage] = []
-
-
-class BusinessItemBase(BaseModel):
-    name: str
-    status: Status
-    business_id: int
-
-
-class BusinessItemIn(BusinessItemBase):
-    pass
-
-
-class BusinessItemOut(BusinessItemBase):
-    model_config = ConfigDict(from_attributes=True)
-    id: int
-    created_at: datetime
+    business_items: list[BusinessItemBase] = []
 
 
 # Token models
