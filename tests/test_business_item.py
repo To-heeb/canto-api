@@ -78,3 +78,62 @@ def test_unauthorized_user_create_business_item(client):
     res = client.post(
         "/business/item/", json={"name": 'name', "status": 1, "business_id": 1})
     assert res.status_code == 401
+
+
+def test_update_business_item(authorized_client, test_businesses, test_business_items):
+    data = {
+        "name": "updated name",
+        "status": 1,
+        "business_id": test_businesses[0].id
+
+    }
+    res = authorized_client.put(
+        f"/business/item/{test_business_items[0].id}", json=data)
+    updated_business_item = schemas.BusinessItemOut(**res.json())
+    assert res.status_code == 200
+    assert updated_business_item.name == data['name']
+    assert updated_business_item.status == data['status']
+
+
+def test_unauthorized_user_update_business_item(client, test_businesses, test_business_items):
+    data = {
+        "name": "updated name",
+        "status": 1,
+        "business_id": test_businesses[0].id
+    }
+
+    res = client.put(
+        f"/business/item/{test_business_items[0].id}", json=data)
+    assert res.status_code == 401
+
+
+def test_update_business_item_that_does_not_exist(authorized_client, test_businesses, test_business_items):
+    data = {
+        "name": "updated name",
+        "status": 1,
+        "business_id": test_businesses[1].id
+
+    }
+    res = authorized_client.put(f"/business/item/999", json=data)
+    print(res.json())
+    assert res.status_code == 404
+
+
+def test_delete_business_item(authorized_client, test_business_items):
+    res = authorized_client.delete(
+        f"/business/item/{test_business_items[0].id}")
+
+    assert res.status_code == 204
+
+
+def test_unauthorized_user_delete_business_item(client, test_business_items):
+    res = client.delete(
+        f"/business/item/{test_business_items[0].id}")
+    assert res.status_code == 401
+
+
+def test_delete_business_item_that_does_not_exist(authorized_client):
+    res = authorized_client.delete(
+        f"/business/item/99")
+
+    assert res.status_code == 404

@@ -1,6 +1,5 @@
 Subtasks
 - test
-    - start test_buiness_item
     - figure out test image
 
 Tasks
@@ -8,6 +7,7 @@ Tasks
 - create frontend for application
 - update readme doc
 - add items to business search
+- fetch items with business too
 
 
 Completed
@@ -21,3 +21,4 @@ Completed
 - test search for business
 - test admin role for admins
 - add items sold by the businesses
+- start test_buiness_item

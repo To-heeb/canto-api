@@ -48,6 +48,47 @@ def get_business_item(id: int, db: Session = Depends(database.conn),
         models.BusinessItem.id == id).first()
     if not business_item:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Business Item with id: {id} does not exist")
+                            detail=f"Business item with id: {id} does not exist")
 
     return business_item
+
+
+@router.put("/item/{id}", status_code=status.HTTP_200_OK, response_model=schemas.BusinessItemOut)
+def update_business_item(id: int, updated_business_item: schemas.BusinessItemIn,
+                         db: Session = Depends(database.conn),
+                         current_user: int = Depends(oauth2.get_current_user)):
+
+    business_item_query = db.query(models.BusinessItem).filter(
+        models.BusinessItem.id == id)
+
+    business_item = business_item_query.first()
+
+    if business_item is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Business item with id: {id} does not exist")
+
+    business_item_query.update(
+        updated_business_item.model_dump(), synchronize_session=False)
+
+    db.commit()
+
+    return business_item_query.first()
+
+
+@router.delete("/item/{id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_business_type(id: int, db: Session = Depends(database.conn),
+                         current_user: int = Depends(oauth2.get_current_user)):
+
+    business_item_query = db.query(models.BusinessItem).filter(
+        models.BusinessItem.id == id)
+
+    business_item = business_item_query.first()
+
+    if business_item == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Business type with id: {id} does not exist")
+
+    business_item_query.delete(synchronize_session=False)
+    db.commit()
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

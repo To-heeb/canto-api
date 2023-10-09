@@ -86,10 +86,10 @@ def test_update_business_type(authorized_client, test_business_types):
     }
     res = authorized_client.put(
         f"/business/type/{test_business_types[0].id}", json=data)
-    updated_business_types = schemas.BusinessTypeOut(**res.json())
+    updated_business_type = schemas.BusinessTypeOut(**res.json())
     assert res.status_code == 200
-    assert updated_business_types.name == data['name']
-    assert updated_business_types.description == data['description']
+    assert updated_business_type.name == data['name']
+    assert updated_business_type.description == data['description']
 
 
 def test_unauthorized_user_update_business_type(client, test_business_types):
@@ -112,7 +112,6 @@ def test_update_business_type_that_does_not_exist(authorized_client, test_busine
         "id": test_business_types[1].id
 
     }
-    print(len(test_business_types))
     res = authorized_client.put(
         f"/business/type/99", json=data)
 

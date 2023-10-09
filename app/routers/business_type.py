@@ -45,7 +45,7 @@ def get_business_type(id: int, db: Session = Depends(database.conn),
     return business_type
 
 
-@router.put("/{id}", response_model=schemas.BusinessTypeOut)
+@router.put("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.BusinessTypeOut)
 def update_business_type(id: int, updated_business_type: schemas.BusinessTypeIn,
                          db: Session = Depends(database.conn),
                          current_user: int = Depends(oauth2.get_current_user)):
