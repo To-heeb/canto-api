@@ -5,9 +5,11 @@ Subtasks
 Tasks
 - write test for application
 - create frontend for application
+    - non actie business should display faded and said it is not active
+    
 - update readme doc
 - add items to business search
-- fetch items with business too
+
 
 
 Completed
@@ -22,3 +24,5 @@ Completed
 - test admin role for admins
 - add items sold by the businesses
 - start test_buiness_item
+- fetch items with business 
+- fetch working hours with business too

@@ -262,7 +262,7 @@ def test_business_items(session, test_businesses):
             "business_id": test_businesses[0].id
         },
         {
-            "name": "Akamu",
+            "name": "Buns",
             "status": 1,
             "business_id": test_businesses[0].id
         },

@@ -81,8 +81,19 @@ def search_businesses(db: Session = Depends(database.conn),
     Returns:
         _type_: _description_
     """
-    businesses = db.query(models.Business).filter(models.Business.name.contains(
-        keyword) | models.Business.description.contains(keyword)).order_by(models.Business.views.desc()).limit(limit).offset(offset).all()
+    businesses = db.query(models.Business).join(models.BusinessItem, models.BusinessItem.business_id ==
+                                                models.Business.id, isouter=True).filter(models.Business.name.icontains(
+                                                    keyword) | models.Business.description.icontains(keyword) | models.BusinessItem.name.icontains(
+                                                    keyword)).order_by(models.Business.views.desc()).limit(limit).offset(offset).all()
+    # .distinct()
+
+    businesses_query = db.query(models.Business).join(models.BusinessItem, models.BusinessItem.business_id ==
+                                                      models.Business.id, isouter=True).filter(models.Business.name.ilike(
+                                                          keyword) | models.Business.description.ilike(keyword) | models.BusinessItem.name.ilike(
+                                                          keyword)).order_by(models.Business.views.desc()).limit(limit).offset(offset)
+
+    raw_query = str(businesses_query)
+    breakpoint()
     return businesses
 
 
@@ -100,16 +111,16 @@ def get_business(id: int, db: Session = Depends(database.conn)):
     Returns:
         _type_: _description_
     """
-    business = db.query(models.Business, models.BusinessItem, models.BusinessImage).join(models.BusinessItem, models.BusinessItem.business_id ==
-                                                                                         models.Business.id, isouter=True).join(models.BusinessImage, models.BusinessImage.business_id == models.Business.id, isouter=True).filter(models.Business.id == id).all()
-    # business_images = business.BusinessImage
-    # business_items = business.BusinessItem
-    business_query = db.query(models.Business, models.BusinessItem, models.BusinessImage).join(models.BusinessItem,
-                                                                                               models.BusinessItem.business_id == models.Business.id, isouter=True).join(models.BusinessImage, models.BusinessImage.business_id == models.Business.id, isouter=True).filter(models.Business.id == id)
+    businesses = db.query(models.Business, models.BusinessItem, models.BusinessImage).join(models.BusinessItem, models.BusinessItem.business_id ==
+                                                                                           models.Business.id, isouter=True).join(models.BusinessImage, models.BusinessImage.business_id == models.Business.id, isouter=True).filter(models.Business.id == id).all()
+    business_working_hours = db.query(models.BusinessWorkingHours).filter(
+        models.BusinessWorkingHours.business_id == id).all()
+    # business_query = db.query(models.Business, models.BusinessItem, models.BusinessImage).join(models.BusinessItem,
+    #                                                                                            models.BusinessItem.business_id == models.Business.id, isouter=True).join(models.BusinessImage, models.BusinessImage.business_id == models.Business.id, isouter=True).filter(models.Business.id == id)
 
-    raw_query = str(business_query)
-    breakpoint()
-    if not business:
+    # raw_query = str(business_query)
+    # breakpoint()
+    if not businesses:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Business Type with id: {id} does not exist")
 
@@ -118,52 +129,45 @@ def get_business(id: int, db: Session = Depends(database.conn)):
 
     db.commit()
 
-    # business_response = schemas.BusinessOut(
-    #     id=business.Business.businesses_id,
-    #     name=business.Business.businesses_name,
-    #     description=business.Business.businesses_description,
-    #     location=business.Business.businesses_location,
-    #     status=business.Business.businesses_status,
-    #     business_type_id=business.Business.businesses_business_type_id,
-    #     display_image=business.Business.businesses_display_image,
-    #     created_at=business.Business.businesses_created_at,
-    #     business_images=schemas.BusinessImage(
-    #         image_url=business.BusinessImage.business_images_image_url,
-    #         image_type=business.BusinessImage.business_images_image_type,
-    #         image_name=business.BusinessImage.business_images_image_name
-    #     ),
-    #     business_items=schemas.BusinessItemOut(
-    #         id=business.BusinessItem.business_items_id,
-    #         name=business.BusinessItem.business_items_name,
-    #         status=business.BusinessItem.business_items_status,
-    #         business_id=business.BusinessItem.business_items_business_id,
-    #         created_at=business.BusinessItem.business_items_created_at
+    business_response = schemas.BusinessOut(
+        id=businesses[0].Business.id,
+        name=businesses[0].Business.name,
+        description=businesses[0].Business.description,
+        location=businesses[0].Business.location,
+        status=businesses[0].Business.status,
+        business_type_id=businesses[0].Business.business_type_id,
+        display_image=businesses[0].Business.display_image,
+        created_at=businesses[0].Business.created_at,
+        business_items=[],
+        business_images=[],
+        working_hours=[]
+    )
 
-    #     )
-    # )
+    for business in businesses:
+        if business.BusinessImage is not None:
+            business_response.business_images = schemas.BusinessImage(
+                image_url=business.BusinessImage.image_url,
+                image_type=business.BusinessImage.image_type,
+                image_name=business.BusinessImage.image_name
+            )
 
-    # for business_image in business_images:
-    #     business_response.business_images.append(
-    #         schemas.BusinessImage(
-    #             image_url=business_image.business_images_image_url,
-    #             image_type=business_image.business_images_image_type,
-    #             image_name=business_image.business_images_image_name
-    #         )
-    #     )
+        if business.BusinessItem is not None:
+            business_response.business_items.append(schemas.BusinessItemOut(
+                id=business.BusinessItem.id,
+                name=business.BusinessItem.name,
+                status=business.BusinessItem.status,
+                business_id=business.BusinessItem.business_id,
+                created_at=business.BusinessItem.created_at
+            ))
 
-    # for business_item in business_items:
-    #     business_response.business_items.append(
-    #         schemas.BusinessItemOut(
-    #             id=business_item.business_items_id,
-    #             name=business_item.business_items_name,
-    #             status=business_item.business_items_status,
-    #             business_id=business_item.business_items_business_id,
-    #             created_at=business_item.business_items_created_at
+    for business_working_hour in business_working_hours:
+        business_response.working_hours.append(schemas.BusinessWorkingDay(
+            day=business_working_hour.weekday,
+            opened_at=business_working_hour.opened_at,
+            closed_at=business_working_hour.closed_at
+        ))
 
-    #         )
-    #     )
-
-    return business
+    return business_response
 
 
 @router.put("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.BusinessOut)

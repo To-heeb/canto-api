@@ -1,6 +1,7 @@
 from datetime import datetime, time
 from typing import List, Optional
-from pydantic import BaseModel, EmailStr, ConfigDict, Field
+from pydantic import BaseModel, EmailStr, ConfigDict, Field, field_validator
+from pydantic_core import PydanticCustomError
 from enum import Enum
 
 
@@ -58,8 +59,21 @@ class BusinessWorkingDuration(BaseModel):
     closed_at: time
 
 
+class DayOfTheWeek(BaseModel):
+    day: int
+
+    @field_validator("day")
+    @classmethod
+    def validate_day(cls, value):
+        if value < 1 or value > 7:
+            raise ValueError("Day must be between 1 and 7")
+        return value
+
+
 class BusinessWorkingDay(BaseModel):
-    working_hours: dict[str, BusinessWorkingDuration]
+    day: int
+    opened_at: time
+    closed_at: time
 
 
 class BusinessTypeBase(BaseModel):
@@ -126,6 +140,17 @@ class BusinessIn(BusinessBase):
     )
     working_hours: dict[int, BusinessWorkingDuration]
 
+    @field_validator("working_hours")
+    @classmethod
+    def validate_working_hours(cls, value):
+        if not all(1 <= key <= 7 for key in value.keys()):
+            raise PydanticCustomError(
+                "Keys in working_hours dictionary must be between 1 and 7")
+        if len(value) > 7:
+            raise ValueError(
+                "The length of working_hours dictionary must not exceed 7")
+        return value
+
 
 class BusinessOut(BusinessBase):
     model_config = ConfigDict(from_attributes=True)
@@ -137,6 +162,7 @@ class BusinessOut(BusinessBase):
     created_at: datetime
     business_images: list[BusinessImage] = []
     business_items: list[BusinessItemBase] = []
+    working_hours: list[BusinessWorkingDay] = []
 
 
 # Token models

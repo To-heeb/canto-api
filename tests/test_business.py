@@ -29,7 +29,7 @@ def test_unauthorized_user_get_all_businesses(client, test_businesses):
 def test_get_one_business(authorized_client, test_businesses, test_business_items):
     res = authorized_client.get(f"/business/{test_businesses[0].id}")
     business = schemas.BusinessOut(**res.json())
-    print(res.json())
+
     assert res.status_code == 200
     assert business.id == test_businesses[0].id
     assert business.name == test_businesses[0].name
@@ -46,8 +46,8 @@ def test_unauthorized_user_get_one_business(client, test_businesses):
     assert business.description == test_businesses[0].description
 
 
-def test_get_one_business_type_that_does_not_exist(authorized_client):
-    res = authorized_client.get(f"/business/type/88888")
+def test_get_one_business_that_does_not_exist(authorized_client):
+    res = authorized_client.get(f"/business/88888")
     assert res.status_code == 404
 
 
@@ -57,7 +57,7 @@ def test_get_one_business_type_that_does_not_exist(authorized_client):
     ("Mama Akara Spot 3", "This is the sales of Akara and Akamu",
      "Behind Block 53", 1, 0)
 ])
-def test_create_business_type(authorized_client, test_business_types, name, description, location, business_type_id, status):
+def test_create_business(authorized_client, test_business_types, name, description, location, business_type_id, status):
     res = authorized_client.post(
         "/business/",
         json={
@@ -200,9 +200,9 @@ def test_update_business_that_does_not_exist(authorized_client, test_business_ty
     assert res.status_code == 404
 
 
-def test_search_business(authorized_client, test_businesses):
+def test_search_business(authorized_client, test_businesses, test_business_items):
     res = authorized_client.get(
-        f"/business/search?keyword=Akara")
+        f"/business/search?keyword=akara")
 
     def validate(business_map):
         return schemas.BusinessOut(**business_map)
@@ -227,5 +227,5 @@ def test_search_business_that_does_not_exist(authorized_client, test_businesses)
     def validate(business_map):
         return schemas.BusinessOut(**business_map)
     business_map = map(validate, res.json())
-    print(business_map)
+
     assert res.status_code == 200
