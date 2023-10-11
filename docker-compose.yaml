@@ -16,12 +16,12 @@ services:
       - 8000:8000
     volumes:
       - ./:/app
-    environment: 
-      - DATABASE_HOSTNAME=postgres
-      - DATABASE_PORT=5432
-      - DATABASE_PASSWORD=mysecretpassword
-      - DATABASE_NAME=canto_db
-      - DATABASE_USERNAME=postgres
+    environment:
+      - DATABASE_HOSTNAME=${DATABASE_HOSTNAME}
+      - DATABASE_PORT=${DATABASE_PORT}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USERNAME=${DATABASE_USERNAME}
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     depends_on:
       - postgres
