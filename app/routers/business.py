@@ -85,15 +85,8 @@ def search_businesses(db: Session = Depends(database.conn),
                                                 models.Business.id, isouter=True).filter(models.Business.name.icontains(
                                                     keyword) | models.Business.description.icontains(keyword) | models.BusinessItem.name.icontains(
                                                     keyword)).order_by(models.Business.views.desc()).limit(limit).offset(offset).all()
-    # .distinct()
+    # the all() is smart enough to filter objects of exactly the same value and return those of different values
 
-    businesses_query = db.query(models.Business).join(models.BusinessItem, models.BusinessItem.business_id ==
-                                                      models.Business.id, isouter=True).filter(models.Business.name.ilike(
-                                                          keyword) | models.Business.description.ilike(keyword) | models.BusinessItem.name.ilike(
-                                                          keyword)).order_by(models.Business.views.desc()).limit(limit).offset(offset)
-
-    raw_query = str(businesses_query)
-    breakpoint()
     return businesses
 
 

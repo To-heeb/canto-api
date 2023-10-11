@@ -8,8 +8,6 @@ Tasks
     - non actie business should display faded and said it is not active
     
 - update readme doc
-- add items to business search
-
 
 
 Completed
@@ -26,3 +24,4 @@ Completed
 - start test_buiness_item
 - fetch items with business 
 - fetch working hours with business too
+- add items to business search
