@@ -5,11 +5,14 @@ Subtasks
 Tasks
 - write test for application
 - create frontend for application
-    - non actie business should display faded and said it is not active
+    - non active business should display faded and said it is not active
     
 - update readme doc
-- setup with nginx on ubuntu machine with rapberrybi
+- test render dp with video
 - endpoint to add multiple items at once
+- update github action to test-deploy.yaml
+- setup with nginx on ubuntu machine with rapberrybi
+- make the endpoint v1 (this should be done after readme update and frontend is Completed)
 
 
 Completed

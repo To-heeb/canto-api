@@ -89,14 +89,14 @@ These are endpoints for businesses to be added.
 
 These are endpoints to add images to the business for people to view more details on them.
 
-| Endpoint                       | Method     | Description                            |
-| ------------------------------ | ---------- | -------------------------------------- |
-| `/business/image/display`    | `POST`   | Add a display image to for a business. |
-| `/business/image/`           | `POST`   | Add multiple images to a business.     |
-| `/business/image/{image_id}` | `DELETE` | Delete an image a from a business.     |
+
+| Endpoint                                            | Method        | Description |
+| --------------------------------------------------- | ------------- | ------------------------------------------------ |
+| `/business/image/display`                         | `POST`    | Retrieve a list of all businesses.                  |
+| `/business/image/{image_id}`                      | `DELETE`  | Delete an image a from a business.                  |
 
 ### Connect with me 🗣️
 
-`<a href="https://twitter.com/oyekolatoheeb"><img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white"/>``</a>`
-`<a href="https://www.linkedin.com/in/toheeb-oyekola-937b59201/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>``</a>`
-`<a href="https://toheeb19.hashnode.dev/"><img src="https://img.shields.io/badge/Hashnode-2962FF?style=for-the-badge&logo=hashnode&logoColor=white"/>``</a>`
+<a href="https://twitter.com/oyekolatoheeb"><img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white"/></a>
+<a href="https://www.linkedin.com/in/toheeb-oyekola-937b59201/"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/></a>
+<a href="https://toheeb19.hashnode.dev/"><img src="https://img.shields.io/badge/Hashnode-2962FF?style=for-the-badge&logo=hashnode&logoColor=white"/></a>
