@@ -8,6 +8,8 @@ Tasks
     - non actie business should display faded and said it is not active
     
 - update readme doc
+- setup with nginx on ubuntu machine with rapberrybi
+- endpoint to add multiple items at once
 
 
 Completed
