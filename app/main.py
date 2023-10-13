@@ -32,4 +32,7 @@ def root():
     Returns:
         string : Welcome message
     """
-    return {"message": "Welcome to canto api"}
+    return {
+        "message": "Welcome to canto api ",
+        "doc": "https://canto-api.onrender.com/docs"
+    }

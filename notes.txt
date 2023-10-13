@@ -10,6 +10,7 @@ Tasks
 - update readme doc
 - test render dp with video
 - endpoint to add multiple items at once
+- endpoint to delete business display image
 - update github action to test-deploy.yaml
 - setup with nginx on ubuntu machine with rapberrybi
 - make the endpoint v1 (this should be done after readme update and frontend is Completed)
