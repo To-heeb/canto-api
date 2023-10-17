@@ -117,10 +117,18 @@ class BusinessItemIn(BusinessItemBase):
     pass
 
 
+class BusinessItemsIn(BaseModel):
+    items: list[BusinessItemBase]
+
+
 class BusinessItemOut(BusinessItemBase):
     model_config = ConfigDict(from_attributes=True)
     id: int
     created_at: datetime
+
+
+class BusinessItemsOut(BaseModel):
+    items: list[BusinessItemBase]
 
 
 class BusinessBase(BaseModel):

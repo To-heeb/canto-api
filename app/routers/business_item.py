@@ -25,6 +25,24 @@ def create_business_item(business_item: schemas.BusinessItemIn,
     return new_business_item
 
 
+@router.post("/items/", status_code=status.HTTP_201_CREATED, response_model=schemas.BusinessItemsOut)
+def create_business_items(business_items: schemas.BusinessItemsIn,
+                          db: Session = Depends(database.conn),
+                          current_user: int = Depends(oauth2.get_current_user)):
+
+    def create_business_item_model(business):
+        return models.BusinessItem(**business)
+
+    business_item_map = map(create_business_item_model,
+                            business_items.model_dump()["items"])
+    business_item_list = list(business_item_map)
+
+    db.add_all(business_item_list)
+    db.commit()
+
+    return {}
+
+
 @router.get("/{business_id}/item/", status_code=status.HTTP_200_OK, response_model=List[schemas.BusinessItemOut])
 def get_business_items(business_id: int, db: Session = Depends(database.conn),
                        current_user: int = Depends(oauth2.get_current_user)):
