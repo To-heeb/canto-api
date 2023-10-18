@@ -7,9 +7,6 @@ Tasks
 - create frontend for application
     - non active business should display faded and said it is not active
     - use default image as business_image if absent
-    
-- update readme doc
-
 - setup with nginx on ubuntu machine with rapberrybi
 - make the endpoint v1 (this should be done after readme update and frontend is Completed)
 
@@ -34,3 +31,4 @@ Completed
 - endpoint to add multiple items at once
 - use main for db creation
 - endpoint to delete business display image
+- update readme doc

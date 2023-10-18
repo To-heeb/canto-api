@@ -169,7 +169,6 @@ def test_update_business_item_that_does_not_exist(authorized_client, test_busine
 
     }
     res = authorized_client.put(f"/business/item/999", json=data)
-    print(res.json())
     assert res.status_code == 404
 
 

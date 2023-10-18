@@ -5,7 +5,7 @@ Welcome to the API documentation for the Blog Application! This document provide
 # Table of Contents
 
 1. [About](#about)
-2. [Feature](#features)
+2. [Features](#features)
 3. [Technologies](#technologies)
 4. [Authentication](#authentication)
 5. [API Endpoints](#api-endpoints)
@@ -13,7 +13,7 @@ Welcome to the API documentation for the Blog Application! This document provide
    - [Business Type Endpoints](#business-type-endpoints)
    - [Business Enpoints](#business-endpoints)
    - [Business Image Endpoints](#business-image-endpoints)
-   - [Business Item Endpoints](#business-items-endpoints)
+   - [Business Item Endpoints](#business-item-endpoints)
 
 ## About
 
@@ -95,6 +95,7 @@ These are endpoints to add images to the business for people to view more detail
 | Endpoint                                            | Method        | Description |
 | --------------------------------------------------- | ------------- | ------------------------------------------------ |
 | `/business/image/display`                         | `POST`    | Add business display image.                  |
+| `/business/image/display`                         | `DELETE`    | Delete business display image.                  |
 | `/business/image/{image_id}`                      | `DELETE`  | Delete an image from a business.           
 | `/business/image/`                         | `POST`    | Add multiple/one image(s) to business.                  |
 | `/business/image/`                      | `DELETE`  | Delete multiple images from a business.             |
@@ -105,6 +106,7 @@ These are endpoints to add images to the business for people to view more detail
 | --------------------------------------------------- | ------------- | ------------------------------------------------ |
 | `/business/item/`                         | `GET`    | Retrieve a list of all businesses items.                  |
 | `/business/item/`                      | `POST`  | Create a business item.
+| `/business/items/`                      | `POST`  | Add multiple business items to business.
 | `/business/{business_id}/item/`                         | `GET`    | Retrieve a list of all items that belongs to a business.                  |
 | `/business/item/{id}`                      | `GET`  | Retrieve a single item.
 | `/business/item/{id}`                         | `PUT`    | Update a business item.                  |
