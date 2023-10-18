@@ -29,8 +29,8 @@ def add_business_images(files: Annotated[list[UploadFile],
     Returns:
         _type_: _description_
     """
-    print("I got here")
-    print(len(files[0].filename))
+    # print("I got here")
+    # print(len(files[0].filename))
     if len(files[0].filename) <= 0:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"No file uploaded")
@@ -178,6 +178,59 @@ def delete_business_image(business_id: schemas.BusinessId,
                             detail=f"An error occurred while deleting the file, please try again later"
                             ) from exc
     business_image_query.delete(synchronize_session=False)
+    db.commit()
+
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.delete("/display", status_code=status.HTTP_204_NO_CONTENT)
+def delete_business_display_image(business_id: schemas.BusinessId,
+                                  id: int, db: Session = Depends(database.conn),
+                                  current_user: int = Depends(oauth2.get_current_user)):
+    """_summary_
+
+    Args:
+        business_id (Annotated[int, Form): _description_
+        id (int): _description_
+        db (Session, optional): _description_. Defaults to Depends(database.conn).
+
+    Raises:
+        HTTPException: _description_
+        HTTPException: _description_
+        HTTPException: _description_
+
+    Returns:
+        _type_: _description_
+    """
+    business_id = business_id.business_id
+
+    business_query = db.query(models.Business).filter(
+        models.Business.id == business_id)
+
+    business = business_query.first()
+
+    business_display_image = business.display_image
+
+    if business_display_image is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Image not found")
+
+    try:
+        os.remove(business_display_image)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Image not found") from exc
+    except Exception as exc:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                            detail=f"An error occurred while deleting the file, please try again later"
+                            ) from exc
+
+    business.display_image = None
+    business = schemas.BusinessIn.from_orm(business)
+
+    business_query.update(business.model_dump(),
+                          synchronize_session=False)
+
     db.commit()
 
     return Response(status_code=status.HTTP_204_NO_CONTENT)

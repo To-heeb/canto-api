@@ -80,6 +80,60 @@ def test_unauthorized_user_create_business_item(client):
     assert res.status_code == 401
 
 
+def test_create_business_items(authorized_client, test_businesses):
+    data = {
+        "items": [
+            {
+                "name": "Puff puff",
+                "status": 0,
+                "business_id": 1
+            },
+            {
+                "name": "Bonse",
+                "status": 1,
+                "business_id": 2
+            },
+            {
+                "name": "Bread",
+                "status": 1,
+                "business_id": 2
+            }
+        ]
+    }
+    res = authorized_client.post(
+        "/business/items/", json=data)
+
+    assert res.status_code == 201
+    assert len(res.json()["items"]) == len(data["items"])
+
+
+def test_unauthorized_user_create_business_items(client):
+    data = {
+        "items": [
+            {
+                "name": "Puff puff",
+                "status": 0,
+                "business_id": 1
+            },
+            {
+                "name": "Bonse",
+                "status": 1,
+                "business_id": 2
+            },
+            {
+                "name": "Bread",
+                "status": 1,
+                "business_id": 2
+            }
+        ]
+    }
+
+    res = client.post(
+        "/business/items/", json=data)
+
+    assert res.status_code == 401
+
+
 def test_update_business_item(authorized_client, test_businesses, test_business_items):
     data = {
         "name": "updated name",

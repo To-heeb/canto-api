@@ -8,7 +8,9 @@ from app.config import settings
 def test_root(client):
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "Welcome to canto api"}
+    assert response.json() == {
+        "message":  "Welcome to canto api, https://canto-api.onrender.com/docs"
+    }
 
 
 def test_create_admin(client):

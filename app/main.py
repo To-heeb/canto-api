@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from . import models
+from .database import engine
 from .routers import admin, business, business_type, business_image, business_item
 
 
@@ -33,6 +35,5 @@ def root():
         string : Welcome message
     """
     return {
-        "message": "Welcome to canto api ",
-        "doc": "https://canto-api.onrender.com/docs"
+        "message": "Welcome to canto api, https://canto-api.onrender.com/docs"
     }

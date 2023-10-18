@@ -40,7 +40,7 @@ def create_business_items(business_items: schemas.BusinessItemsIn,
     db.add_all(business_item_list)
     db.commit()
 
-    return {}
+    return business_items
 
 
 @router.get("/{business_id}/item/", status_code=status.HTTP_200_OK, response_model=List[schemas.BusinessItemOut])
@@ -94,7 +94,7 @@ def update_business_item(id: int, updated_business_item: schemas.BusinessItemIn,
 
 
 @router.delete("/item/{id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_business_type(id: int, db: Session = Depends(database.conn),
+def delete_business_item(id: int, db: Session = Depends(database.conn),
                          current_user: int = Depends(oauth2.get_current_user)):
 
     business_item_query = db.query(models.BusinessItem).filter(
@@ -104,7 +104,7 @@ def delete_business_type(id: int, db: Session = Depends(database.conn),
 
     if business_item == None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Business type with id: {id} does not exist")
+                            detail=f"Business item with id: {id} does not exist")
 
     business_item_query.delete(synchronize_session=False)
     db.commit()
