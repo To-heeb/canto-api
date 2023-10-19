@@ -104,10 +104,13 @@ def get_business(id: int, db: Session = Depends(database.conn)):
     Returns:
         _type_: _description_
     """
-    businesses = db.query(models.Business, models.BusinessItem, models.BusinessImage).join(models.BusinessItem, models.BusinessItem.business_id ==
-                                                                                           models.Business.id, isouter=True).join(models.BusinessImage, models.BusinessImage.business_id == models.Business.id, isouter=True).filter(models.Business.id == id).all()
+    businesses = db.query(models.Business, models.BusinessItem).join(models.BusinessItem, models.BusinessItem.business_id ==
+                                                                     models.Business.id, isouter=True).filter(models.Business.id == id).all()
     business_working_hours = db.query(models.BusinessWorkingHours).filter(
         models.BusinessWorkingHours.business_id == id).all()
+
+    business_images = db.query(models.BusinessImage).filter(
+        models.BusinessImage.business_id == id).all()
     # business_query = db.query(models.Business, models.BusinessItem, models.BusinessImage).join(models.BusinessItem,
     #                                                                                            models.BusinessItem.business_id == models.Business.id, isouter=True).join(models.BusinessImage, models.BusinessImage.business_id == models.Business.id, isouter=True).filter(models.Business.id == id)
 
@@ -137,13 +140,6 @@ def get_business(id: int, db: Session = Depends(database.conn)):
     )
 
     for business in businesses:
-        if business.BusinessImage is not None:
-            business_response.business_images = schemas.BusinessImage(
-                image_url=business.BusinessImage.image_url,
-                image_type=business.BusinessImage.image_type,
-                image_name=business.BusinessImage.image_name
-            )
-
         if business.BusinessItem is not None:
             business_response.business_items.append(schemas.BusinessItemOut(
                 id=business.BusinessItem.id,
@@ -152,6 +148,14 @@ def get_business(id: int, db: Session = Depends(database.conn)):
                 business_id=business.BusinessItem.business_id,
                 created_at=business.BusinessItem.created_at
             ))
+
+    if business_images is not None:
+        for business_image in business_images:
+            business_response.business_images = schemas.BusinessImage(
+                image_url=business_image.image_url,
+                image_type=business_image.image_type,
+                image_name=business_image.image_name
+            )
 
     for business_working_hour in business_working_hours:
         business_response.working_hours.append(schemas.BusinessWorkingDay(

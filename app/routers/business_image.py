@@ -193,7 +193,7 @@ def delete_business_image(business_id: schemas.BusinessId,
 
 @router.delete("/display", status_code=status.HTTP_204_NO_CONTENT)
 def delete_business_display_image(business_id: schemas.BusinessId,
-                                  id: int, db: Session = Depends(database.conn),
+                                  db: Session = Depends(database.conn),
                                   current_user: int = Depends(oauth2.get_current_user)):
     """_summary_
 
