@@ -9,6 +9,7 @@ Tasks
     - use default image as business_image if absent
 - setup with nginx on ubuntu machine with rapberrybi
 - make the endpoint v1 (this should be done after readme update and frontend is Completed)
+- complete postman doc endpoints
 
 
 Completed

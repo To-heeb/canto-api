@@ -128,10 +128,18 @@ def add_business_display_image(file: UploadFile,
         file.file.close()
 
     business.display_image = image_url
-    business = schemas.BusinessIn.from_orm(business)
+    # business = schemas.BusinessIn.from_orm(business)
 
-    business_query.update(business.model_dump(),
-                          synchronize_session=False)
+    business_query.update(models.Business(
+        name=business.name,
+        location=business.location,
+        status=business.status,
+        business_type_id=business.business_type_id,
+        description=business.description,
+        views=business.views,
+        display_image=business.display_image
+    ),
+        synchronize_session=False)
 
     db.commit()
 
