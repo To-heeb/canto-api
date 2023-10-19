@@ -151,11 +151,11 @@ def get_business(id: int, db: Session = Depends(database.conn)):
 
     if business_images is not None:
         for business_image in business_images:
-            business_response.business_images = schemas.BusinessImage(
+            business_response.business_images.append(schemas.BusinessImage(
                 image_url=business_image.image_url,
                 image_type=business_image.image_type,
                 image_name=business_image.image_name
-            )
+            ))
 
     for business_working_hour in business_working_hours:
         business_response.working_hours.append(schemas.BusinessWorkingDay(
