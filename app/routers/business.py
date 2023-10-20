@@ -111,11 +111,13 @@ def get_business(id: int, db: Session = Depends(database.conn)):
 
     # businesses = db.query(models.Business, models.BusinessItem).join(models.BusinessItem, models.BusinessItem.business_id ==
     #                                                                  models.Business.id, isouter=True).filter(models.Business.id == id).all()
+
     business_working_hours = db.query(models.BusinessWorkingHours).filter(
         models.BusinessWorkingHours.business_id == id).all()
 
     # business_images = db.query(models.BusinessImage).filter(
     #     models.BusinessImage.business_id == id).all()
+
     # business_query = db.query(models.Business, models.BusinessItem, models.BusinessImage).join(models.BusinessItem,
     #                                                                                            models.BusinessItem.business_id == models.Business.id, isouter=True).join(models.BusinessImage, models.BusinessImage.business_id == models.Business.id, isouter=True).filter(models.Business.id == id)
 
@@ -162,12 +164,12 @@ def get_business(id: int, db: Session = Depends(database.conn)):
     #             image_name=business_image.image_name
     #         ))
 
-    # for business_working_hour in business_working_hours:
-    #     business_response.working_hours.append(schemas.BusinessWorkingDay(
-    #         day=business_working_hour.weekday,
-    #         opened_at=business_working_hour.opened_at,
-    #         closed_at=business_working_hour.closed_at
-    #     ))
+    for business_working_hour in business_working_hours:
+        businesses.working_hours.append(schemas.BusinessWorkingDay(
+            day=business_working_hour.weekday,
+            opened_at=business_working_hour.opened_at,
+            closed_at=business_working_hour.closed_at
+        ))
 
     return businesses
 

@@ -30,7 +30,9 @@ Canto API allows businesses in a specific location, area or gated community to b
 
 * Python
 * Docker
+* Sqlalchemy
 * PostgreSQL
+* Pytest
 * [Swagger API Spec](https://canto-api.onrender.com/docs#/)
 * Uvicorn server
 
