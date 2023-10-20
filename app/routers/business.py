@@ -132,6 +132,7 @@ def get_business(id: int, db: Session = Depends(database.conn)):
 
     db.commit()
 
+    businesses.working_hours = []
     # business_response = schemas.BusinessOut(
     #     id=businesses[0].Business.id,
     #     name=businesses[0].Business.name,
