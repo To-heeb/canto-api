@@ -3,13 +3,14 @@ Subtasks
     - figure out test image
 
 Tasks
-- write test for application
+- use just one hour(two sessions) to figure out image upload test
+- test tomorrow(one session)
 - create frontend for application
     - non active business should display faded and said it is not active
     - use default image as business_image if absent
 - setup with nginx on ubuntu machine with rapberrybi
 - make the endpoint v1 (this should be done after readme update and frontend is Completed)
-- complete postman doc endpoints
+
 
 
 Completed
@@ -33,3 +34,5 @@ Completed
 - use main for db creation
 - endpoint to delete business display image
 - update readme doc
+- complete postman doc endpoints
+- write test for application
