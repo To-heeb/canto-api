@@ -106,7 +106,8 @@ def get_business(id: int, db: Session = Depends(database.conn)):
     """
 
     # test tomorrow
-    businesses = db.query(models.Business).all()
+    businesses = db.query(models.Business).filter(
+        models.Business.id == id).all()
 
     # businesses = db.query(models.Business, models.BusinessItem).join(models.BusinessItem, models.BusinessItem.business_id ==
     #                                                                  models.Business.id, isouter=True).filter(models.Business.id == id).all()
