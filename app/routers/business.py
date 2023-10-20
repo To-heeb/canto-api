@@ -105,24 +105,17 @@ def get_business(id: int, db: Session = Depends(database.conn)):
         _type_: _description_
     """
 
-    # test tomorrow
     businesses = db.query(models.Business).filter(
         models.Business.id == id).first()
 
-    # businesses = db.query(models.Business, models.BusinessItem).join(models.BusinessItem, models.BusinessItem.business_id ==
-    #                                                                  models.Business.id, isouter=True).filter(models.Business.id == id).all()
-
     business_working_hours = db.query(models.BusinessWorkingHours).filter(
         models.BusinessWorkingHours.business_id == id).all()
-
-    # business_images = db.query(models.BusinessImage).filter(
-    #     models.BusinessImage.business_id == id).all()
 
     # business_query = db.query(models.Business, models.BusinessItem, models.BusinessImage).join(models.BusinessItem,
     #                                                                                            models.BusinessItem.business_id == models.Business.id, isouter=True).join(models.BusinessImage, models.BusinessImage.business_id == models.Business.id, isouter=True).filter(models.Business.id == id)
 
     # raw_query = str(business_query)
-    # breakpoint()
+
     if not businesses:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"Business Type with id: {id} does not exist")
@@ -133,37 +126,6 @@ def get_business(id: int, db: Session = Depends(database.conn)):
     db.commit()
 
     businesses.working_hours = []
-    # business_response = schemas.BusinessOut(
-    #     id=businesses[0].Business.id,
-    #     name=businesses[0].Business.name,
-    #     description=businesses[0].Business.description,
-    #     location=businesses[0].Business.location,
-    #     status=businesses[0].Business.status,
-    #     business_type_id=businesses[0].Business.business_type_id,
-    #     display_image=businesses[0].Business.display_image,
-    #     created_at=businesses[0].Business.created_at,
-    #     business_items=[],
-    #     business_images=[],
-    #     working_hours=[]
-    # )
-
-    # for business in businesses:
-    #     if business.BusinessItem is not None:
-    #         business_response.business_items.append(schemas.BusinessItemOut(
-    #             id=business.BusinessItem.id,
-    #             name=business.BusinessItem.name,
-    #             status=business.BusinessItem.status,
-    #             business_id=business.BusinessItem.business_id,
-    #             created_at=business.BusinessItem.created_at
-    #         ))
-
-    # if business_images is not None:
-    #     for business_image in business_images:
-    #         business_response.business_images.append(schemas.BusinessImage(
-    #             image_url=business_image.image_url,
-    #             image_type=business_image.image_type,
-    #             image_name=business_image.image_name
-    #         ))
 
     for business_working_hour in business_working_hours:
         businesses.working_hours.append(schemas.BusinessWorkingDay(

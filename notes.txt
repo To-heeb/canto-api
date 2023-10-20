@@ -4,7 +4,7 @@ Subtasks
 
 Tasks
 - use just one hour(two sessions) to figure out image upload test
-- test tomorrow(one session)
+
 - create frontend for application
     - non active business should display faded and said it is not active
     - use default image as business_image if absent
@@ -36,3 +36,4 @@ Completed
 - update readme doc
 - complete postman doc endpoints
 - write test for application
+- test tomorrow(one session)
