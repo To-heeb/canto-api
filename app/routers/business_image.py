@@ -31,6 +31,7 @@ def add_business_images(files: Annotated[list[UploadFile],
     """
     # print("I got here")
     # print(len(files[0].filename))
+    # breakpoint()
     if len(files[0].filename) <= 0:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST,
                             detail=f"No file uploaded")

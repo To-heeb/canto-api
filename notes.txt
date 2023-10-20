@@ -3,8 +3,7 @@ Subtasks
     - figure out test image
 
 Tasks
-- use just one hour(two sessions) to figure out image upload test
-
+- come back to image upload test
 - create frontend for application
     - non active business should display faded and said it is not active
     - use default image as business_image if absent
