@@ -21,20 +21,20 @@ Canto API allows businesses in a specific location, area or gated community to b
 
 ## Features
 
-* Authentication
-* Multipe image upload
-* Search with keywords
-* View details of the Business
+- Authentication
+- Multipe image upload
+- Search with keywords
+- View details of the Business
 
 ## Technologies
 
-* Python
-* Docker
-* Sqlalchemy
-* PostgreSQL
-* Pytest
-* [Swagger API Spec](https://canto-api.onrender.com/docs#/)
-* Uvicorn server
+- Python
+- Docker
+- Sqlalchemy
+- PostgreSQL
+- Pytest
+- [Swagger API Spec](https://canto-api.onrender.com/docs#/)
+- Uvicorn server
 
 ## Authentication
 
@@ -54,22 +54,22 @@ Authorization: Bearer YOUR_ACCESS_TOKEN
 
 This enpoints are for those that can add a business to the application.
 
-| Endpoint               | Method     | Description                                    |
-| ---------------------- | ---------- | ---------------------------------------------- |
-| `/admins`            | `GET`    | Retrieve a list of all admins.                 |
-| `/admins/{admin_id}` | `GET`    | Retrieve a specific detail of admin by its ID. |
-| `/admin`             | `POST`   | Create an admin account.                       |
-| `/admins/{admin_id}` | `PUT`    | Update an existing admin by its ID.            |
-| `/admins/{admin_id}` | `DELETE` | Delete an admin account by its ID.             |
-| `/admins/login`      | `POST`   | Admin can login to account.                    |
-| `/admins/{admin_id}/image`      | `POST`   | Add display image for admin.                    |
+| Endpoint                   | Method   | Description                                    |
+| -------------------------- | -------- | ---------------------------------------------- |
+| `/admins`                  | `GET`    | Retrieve a list of all admins.                 |
+| `/admins/{admin_id}`       | `GET`    | Retrieve a specific detail of admin by its ID. |
+| `/admin`                   | `POST`   | Create an admin account.                       |
+| `/admins/{admin_id}`       | `PUT`    | Update an existing admin by its ID.            |
+| `/admins/{admin_id}`       | `DELETE` | Delete an admin account by its ID.             |
+| `/admins/login`            | `POST`   | Admin can login to account.                    |
+| `/admins/{admin_id}/image` | `POST`   | Add display image for admin.                   |
 
 ## Business Type Endpoints
 
-These endpoints is just a to categorize the business into various types and categories based on the Admins intuition.
+These endpoints are just to categorize the business into various types and categories are based on the Admins intuition.
 
-| Endpoint                     | Method     | Description                                         |
-| ---------------------------- | ---------- | --------------------------------------------------- |
+| Endpoint                   | Method   | Description                                         |
+| -------------------------- | -------- | --------------------------------------------------- |
 | `/business/type`           | `GET`    | Retrieve a list of all businesses.                  |
 | `/business/type/{type_id}` | `GET`    | Retrieve a specific detail of a business by its ID. |
 | `/business/type`           | `POST`   | Add a business.                                     |
@@ -80,8 +80,8 @@ These endpoints is just a to categorize the business into various types and cate
 
 These are endpoints for businesses to be added.
 
-| Endpoint                                            | Method     | Description                                         |
-| --------------------------------------------------- | ---------- | --------------------------------------------------- |
+| Endpoint                                          | Method   | Description                                         |
+| ------------------------------------------------- | -------- | --------------------------------------------------- |
 | `/business`                                       | `GET`    | Retrieve a list of all businesses.                  |
 | `/business/{business_id}`                         | `GET`    | Retrieve a specific detail of a business by its ID. |
 | `/business`                                       | `POST`   | Add a business.                                     |
@@ -93,27 +93,25 @@ These are endpoints for businesses to be added.
 
 These are endpoints to add images to the business for people to view more details on them.
 
-
-| Endpoint                                            | Method        | Description |
-| --------------------------------------------------- | ------------- | ------------------------------------------------ |
-| `/business/image/display`                         | `POST`    | Add business display image.                  |
-| `/business/image/display`                         | `DELETE`    | Delete business display image.                  |
-| `/business/image/{image_id}`                      | `DELETE`  | Delete an image from a business.           
-| `/business/image/`                         | `POST`    | Add multiple/one image(s) to business.                  |
-| `/business/image/`                      | `DELETE`  | Delete multiple images from a business.             |
-
+| Endpoint                     | Method   | Description                             |
+| ---------------------------- | -------- | --------------------------------------- |
+| `/business/image/display`    | `POST`   | Add business display image.             |
+| `/business/image/display`    | `DELETE` | Delete business display image.          |
+| `/business/image/{image_id}` | `DELETE` | Delete an image from a business.        |
+| `/business/image/`           | `POST`   | Add multiple/one image(s) to business.  |
+| `/business/image/`           | `DELETE` | Delete multiple images from a business. |
 
 ## Business Item Endpoints
-| Endpoint                                            | Method        | Description |
-| --------------------------------------------------- | ------------- | ------------------------------------------------ |
-| `/business/item/`                         | `GET`    | Retrieve a list of all businesses items.                  |
-| `/business/item/`                      | `POST`  | Create a business item.
-| `/business/items/`                      | `POST`  | Add multiple business items to business.
-| `/business/{business_id}/item/`                         | `GET`    | Retrieve a list of all items that belongs to a business.                  |
-| `/business/item/{id}`                      | `GET`  | Retrieve a single item.
-| `/business/item/{id}`                         | `PUT`    | Update a business item.                  |
-| `/business/item/{id}`                      | `DELETE`  | Delete a business item.   
 
+| Endpoint                        | Method   | Description                                              |
+| ------------------------------- | -------- | -------------------------------------------------------- |
+| `/business/item/`               | `GET`    | Retrieve a list of all businesses items.                 |
+| `/business/item/`               | `POST`   | Create a business item.                                  |
+| `/business/items/`              | `POST`   | Add multiple business items to business.                 |
+| `/business/{business_id}/item/` | `GET`    | Retrieve a list of all items that belongs to a business. |
+| `/business/item/{id}`           | `GET`    | Retrieve a single item.                                  |
+| `/business/item/{id}`           | `PUT`    | Update a business item.                                  |
+| `/business/item/{id}`           | `DELETE` | Delete a business item.                                  |
 
 ### Connect with me 🗣️
 
