@@ -3,13 +3,16 @@ Subtasks
     - figure out test image
 
 Tasks
+- 
+- set status for admin and make only active admin able to login (status can be active and banned), 
+ default should be active on creating it
+- add status to admin table in db and also create function to update it 
 - come back to image upload test
 - create frontend for application
     - non active business should display faded and said it is not active
     - use default image as business_image if absent
 - setup with nginx on ubuntu machine with rapberrybi
 - make the endpoint v1 (this should be done after readme update and frontend is Completed)
-
 
 
 Completed
